@@ -1,6 +1,6 @@
 @extends('admin.layout.main')
 
-@section('title', 'Data Jenis Menu')
+@section('title', '')
 
 @section('container')
 

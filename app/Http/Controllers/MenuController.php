@@ -6,6 +6,8 @@ use App\Models\Menu;
 use App\Models\JenisMenu;
 use App\Models\Tenant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class MenuController extends Controller
 {
@@ -105,6 +107,21 @@ class MenuController extends Controller
         return redirect()->route('menu');
     }
 
+
+    public function getMenuById(Request $request)
+    {
+        if (Auth::check()) {
+            $id_menu = $request->input('id_menu');
+            $menu = Menu::find($id_menu);
+            $user_id = Auth::id();
+
+            return response()->json([
+                'success' => true,
+                'user_id'=>$id_menu,
+                'menu' => $menu
+            ]);
+        }
+    }
 
 
 }

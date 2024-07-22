@@ -63,6 +63,17 @@ section.portfolio {
     object-fit: cover;
 
 }
+
+.portfolio img.imgTenent {
+    width: 80%;
+    height: 100% !important;
+
+    box-shadow: none;
+    display: block;
+    margin: auto;
+    object-fit: cover;
+
+}
 .portfolio img.imgSold {
     width: 80%;
     height: 100px !important;
@@ -137,6 +148,33 @@ section.portfolio {
     width: 45%;
     padding: 2px;
     margin: 2px;
+}
+
+.bill div.judul{
+        text-align: center;
+        font-size: 22px;
+        font-weight: bold;
+        color: rgb(2, 2, 107);
+        opacity: 1;
+        padding: none;
+        margin: none;
+}
+.bill div.content {
+    text-align: center;
+    font-size: 14px;
+    font-weight: normal;
+    opacity: 1;
+    padding: none;
+    margin: none;
+}
+.bill div.warning {
+    text-align: center;
+    font-size: 12px;
+    font-style: italic;
+    color: brown;
+    opacity: 1;
+    padding: none;
+    margin: none;
 }
 
 

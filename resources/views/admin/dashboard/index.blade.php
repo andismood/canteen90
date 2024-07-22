@@ -1,25 +1,28 @@
 @extends('admin.layout.main')
 
-@section('title', 'Dashboard Tenent ')
+@section('title', '')
 
 @section('container')
 
 
 <div class="card shadow mb-4 mt-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Pilih Tenant</h6>
+    </div>
     <section class="portfolio" id="portfolio">
         <div class="container fluid">
             <row>
                 <div class="row">
                     @foreach ($data as $row)
                     <div class="col-sm-3 ">
-                        <a class="gambar mb-4">
+                        <a class="gambar">
                             <!-- <div class="oval-image">
                                 <img src=" {{ $row->url_gambar }}" alt="{{ $row->nama_tenant }}">
                             </div> -->
                             <a href="{{route('tenant.menu-tenant',$row->id_tenant)}}"><img src=" {{ $row->url_gambar }}" alt="{{ $row->nama_tenant }}"></a>
                             <span> </span>
                             <!-- <div class="namaTenant">{{$row->nama_kantin}}</div> -->
-                            <div class="menuNama mt-3 mb-3">{{$row->nama_kantin}}</div>
+                            <div class="menuNama mb-3">{{$row->nama_kantin}}</div>
                             <!-- <div class="menuHarga">{{"Rp. " .$row->harga_jual}}</div> -->
 
                             <!-- @if ($row->status_menu == "0")

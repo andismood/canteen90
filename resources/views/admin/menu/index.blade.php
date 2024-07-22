@@ -1,6 +1,6 @@
 @extends('admin.layout.main')
 
-@section('title', 'Data Menu')
+@section('title', '')
 
 @section('container')
 
@@ -17,7 +17,7 @@
                 <div class="rxjs-table">
                     <div className="rxjs-table-body">
                         <div class="table-responsive">
-                            <table class="table table-striped" style="width: 100%; text-align: center; border-collapse: collapse;" id="dataTable" width="100%" cellspacing="0">
+                            <table class="table table-bordered" style="width: 100%; text-align: center; border-collapse: collapse;" id="dataTable" width="100%" cellspacing="0">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th>No</th>

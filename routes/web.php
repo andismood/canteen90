@@ -97,6 +97,8 @@ Route::middleware('auth')->group(
             Route::post('edit/{id}', 'update')->name('menu.tambah.update');
             Route::get('edit/{id}', 'edit')->name('menu.edit');
             Route::get('hapus/{id}', 'hapus')->name('menu.hapus');
+            Route::get('by-id', 'getMenuById')->name('menu.by-id');
+
         });
 
 });
