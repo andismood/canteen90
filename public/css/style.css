@@ -1,0 +1,147 @@
+
+.form-signin .form-floating:focus-within {
+    z-index: 2;
+}
+
+.form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+.form-registration input{
+    border-radius: 0;
+    margin-bottom: -1px;
+}
+
+h2 {
+    font-size: 38px;
+    font-weight: bold;
+}
+
+section {
+    display: block;
+}
+
+section.portfolio {
+    padding-top: 25px;
+    background-color: rgba(235, 223, 223, 0.4);
+    min-height: auto;
+}
+
+.portfolio img {
+    width: 100%;
+    height: 230px !important;
+    border: 5px solid white;
+    -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+
+}
+
+.portfolio span {
+    position: absolute;
+    display: block;
+    top: 0px;
+    height: 280px !important;
+    text-shadow: 1px 1px 1px #ddd;
+    opacity: 0;
+    transform: scale(0) rotate(0);
+    transition: 0.3s;
+}
+
+.portfolio a:hover span {
+    opacity: 1;
+    transform: scale(1) rotate(360deg);
+    background-color: rgba(200, 200, 200, 0.6);
+    margin: 1px;
+    height: 90%;
+}
+.portfolio div.namaTenant {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    bottom: 0px;
+    font-size: 24px;
+    font-weight: bold;
+    opacity: 0;
+}
+
+.portfolio div.menuNama {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    bottom: 130px;
+    font-size: 24px;
+    font-weight: bold;
+    opacity: 0;
+}
+
+.portfolio div.menuHarga {
+    position: absolute;
+    text-align: center;
+    bottom: 120px;
+    left: 0;
+    font-size: 18px;
+    font-weight: bold;
+    opacity: 0;
+}
+.portfolio a {
+    text-decoration: none;
+    /* Ensure links have no underline by default */
+    color: inherit;
+    /* Use the default text color */
+}
+
+.portfolio a:hover {
+    text-decoration: none;
+    /* Remove underline on hover */
+    color: inherit;
+    /* Ensure text color remains consistent on hover */
+}
+
+.portfolio a:hover div {
+    opacity: 1;
+    /* Example opacity transition */
+}
+
+@media screen and (max-width: 580px) {
+
+    span.navbar-toggler-icon hr.new1,
+    span.navbar-toggler-icon hr.new2,
+    span.navbar-toggler-icon hr.new3 {
+        position: absolute;
+        width: 30px;
+        border: 2px solid black;
+    }
+
+    span.navbar-toggler-icon hr.new1 {
+        top: 2px;
+    }
+
+    span.navbar-toggler-icon hr.new2 {
+        top: 10px;
+    }
+
+    span.navbar-toggler-icon hr.new3 {
+        top: 18px;
+    }
+
+    section#portfolio {
+        position: relative;
+        top: 200px;
+    }
+
+    .menuCustomerBeli {
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+}
+
+
