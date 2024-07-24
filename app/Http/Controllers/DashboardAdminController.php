@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\TryCatch;
 class DashboardAdminController extends Controller
 {
     public function index(){
-        $test = "";
         $menu = Menu::getAllMenu();
         return view('admin.index', ['data' => $menu]);
     }
