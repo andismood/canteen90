@@ -22,7 +22,14 @@ class Menu extends Model
             join mst_tenant c on a.id_tenant = c.id_tenant");
     }
 
+    public function tenant(){
+        return $this->belongsTo(Tenant::class, 'id_tenant', 'id_tenant');
+    }
 
+    public function pesanan()
+    {
+        return $this->hasMany(Pesanan::class, 'id_menu', 'id_menu');
+    }
 
 
 }

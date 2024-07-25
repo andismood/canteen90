@@ -17,7 +17,8 @@
                 <div class="portfolio">
                     <div class="row mb-4">
                         <div class="col-sm-3  mb-2">
-                            <img src=" {{ $data[0]->url_gambar }}" alt="{{ $data[0]->nama_tenant }}" class="imgTenent">
+                            <input type="hidden" id="url_any" name="url_any" value="{{URL::asset('/')}}" />
+                            <img src="{{URL::asset('/images/'.$data[0]->url_gambar)}}" alt="{{ $data[0]->nama_tenant }}" class="imgTenent">
                         </div>
                         <div class="col-sm-6 ">
                             <div class="row menuNama">
@@ -30,7 +31,7 @@
                     @foreach ($data as $row)
                     <div class=" d-flex flex-row mb-3">
                         <div class="p-2">
-                            <img src="{{ $row->nama_gambar }}" alt="{{ $row->nama_menu }}" style="max-width: 100px; max-height: 100px;">
+                            <img src="{{URL::asset('/images/'.$row->nama_gambar)}}" alt="{{ $row->nama_menu }}" style="max-width: 100px; max-height: 100px;">
                         </div>
                         <div class="p-2">
                             {{ $row->nama_jenis_menu }}<br>
@@ -50,7 +51,7 @@
             <div class="card-footer">
                 <div class="d-inline-flex">
                     <div class=" py-2">
-                        <a href="{{route('dashboard')}}" class="btn btn-sm btn-primary px-3 mx-2">kembali</a>
+                        <a href="{{route('dashboard')}}" class="btn btn-sm btn-secondary px-3 mx-2">kembali</a>
                     </div>
 
                     <div class="py-2">
@@ -69,7 +70,7 @@
         <div class="modal-content">
 
             <form action="" method="">
-                <div class="modal-body m-3">
+                <div class="modal-body ">
 
                     <div class="row bill">
                         <div class="container text-center">
@@ -86,9 +87,9 @@
                                 <Label>Tolong Cek Kembali Pesanan Anda</Label>
                             </div>
                         </div>
-
-
                         <hr>
+
+
 
 
                         <div class="row">
@@ -171,18 +172,18 @@
         $('.menuPesan').click(function() {
             var id_menu = $(this).attr('id');
             var id_tenant = $(this).attr('id2');
-
+            var $path = $('#url_any').val() + "images/";
             $.ajax({
                 url: "{{ route('menu.by-id') }}",
                 method: "GET",
                 data: {
                     id_menu: id_menu,
-                    _token: "{{ csrf_token() }}" // Tambahkan token CSRF
+                    _token: "{{ csrf_token() }}"
                 },
 
                 success: function(response) {
 
-                    $('#modalMenuImage').attr('src', response.menu.nama_gambar); // Mengatur sumber gambar
+                    $('#modalMenuImage').attr('src', $path + response.menu.nama_gambar);
 
                     // Contoh lain untuk menampilkan informasi lainnya di modal
                     $('#modalMenuName').text(response.menu.nama_menu);
@@ -223,6 +224,30 @@
             }
         });
 
+        $('#bill').click(function() {
+            cekPesanan();
+        });
+
+        function cekPesanan() {
+            $.ajax({
+                url: "{{ route('pesanan.cek') }}",
+                method: "GET",
+                data: {
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    console.log(response.menu)
+                },
+                error: response => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'GAGAL',
+                        text: 'Terjadi kesalahan saat mendapatkan data.' + response,
+                    });
+                }
+            });
+        }
+
         function bersih() {
             $('#jumlah').val('0'); // Set input value to empty string
             $('#catatan').val('');
@@ -260,7 +285,6 @@
                     $('#exampleModal').modal('hide');
                 },
                 error: response => {
-                    console.log(response);
                     Swal.fire({
                         icon: 'error',
                         title: 'GAGAL',

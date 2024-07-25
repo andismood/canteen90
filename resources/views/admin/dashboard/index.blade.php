@@ -19,7 +19,7 @@
                             <!-- <div class="oval-image">
                                 <img src=" {{ $row->url_gambar }}" alt="{{ $row->nama_tenant }}">
                             </div> -->
-                            <a href="{{route('tenant.menu-tenant',$row->id_tenant)}}"><img src=" {{ $row->url_gambar }}" alt="{{ $row->nama_tenant }}"></a>
+                            <a href="{{route('tenant.menu-tenant',$row->id_tenant)}}"><img src="{{URL::asset('/images/'.$row->url_gambar)}}"  alt=" {{ $row->nama_tenant }}"></a>
                             <span> </span>
                             <!-- <div class="namaTenant">{{$row->nama_kantin}}</div> -->
                             <div class="menuNama mb-3">{{$row->nama_kantin}}</div>

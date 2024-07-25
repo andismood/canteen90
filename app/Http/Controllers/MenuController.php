@@ -113,7 +113,7 @@ class MenuController extends Controller
         if (Auth::check()) {
             $id_menu = $request->input('id_menu');
             $menu = Menu::find($id_menu);
-            $user_id = Auth::id();
+           // $user_id = Auth::id();
 
             return response()->json([
                 'success' => true,

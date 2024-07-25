@@ -49,6 +49,7 @@ Route::middleware('auth')->group(
 
         Route::controller(PesananController::class)->prefix('pesanan')->group(function () {
             Route::get('', 'index')->name('pesanan');
+            Route::get('cek-pesanan', 'getPesanan')->name('pesanan.cek');
         });
 
 
