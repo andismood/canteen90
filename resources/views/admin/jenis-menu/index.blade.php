@@ -9,11 +9,11 @@
     <div class="container-fluid">
 
         <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Data Jenis Menu</h6>
+            <div class="card-header bg-success py-3">
+                <h6 class="m-0 font-weight-bold text-white">Data Jenis Menu</h6>
             </div>
             <div class="card-body">
-                <a href="{{route('jenis-menu.tambah')}}" class="btn btn-primary mb-3">Tambah</a>
+                <a href="{{route('jenis-menu.tambah')}}" class="btn btn-sm btn-success mb-3">Tambah</a>
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
@@ -31,8 +31,8 @@
                                 <th>{{ $no++ }}</th>
                                 <td>{{ $row->nama_jenis_menu }}</td>
                                 <td>
-                                    <a href="{{ route('jenis-menu.edit', $row->id_jenis_menu) }}" class="btn btn-warning">Edit</a>
-                                    <a href="{{ route('jenis-menu.hapus', $row->id_jenis_menu) }}" class="btn btn-danger">Hapus</a>
+                                    <a href="{{ route('jenis-menu.edit', $row->id_jenis_menu) }}" class="btn btn-sm btn-warning">Ubah</a>
+                                    <a href="{{ route('jenis-menu.hapus', $row->id_jenis_menu) }}" class="btn btn-sm btn-danger">Hapus</a>
                                 </td>
                             </tr>
                             @endforeach

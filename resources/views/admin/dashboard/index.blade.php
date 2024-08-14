@@ -6,8 +6,8 @@
 
 
 <div class="card shadow mb-4 mt-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Pilih Tenant</h6>
+    <div class="card-header bg-success py-3">
+        <h6 class="m-0 font-weight-bold text-white">Pilih Tenant</h6>
     </div>
     <section class="portfolio" id="portfolio">
         <div class="container fluid">
@@ -19,7 +19,7 @@
                             <!-- <div class="oval-image">
                                 <img src=" {{ $row->url_gambar }}" alt="{{ $row->nama_tenant }}">
                             </div> -->
-                            <a href="{{route('tenant.menu-tenant',$row->id_tenant)}}"><img src="{{URL::asset('/images/'.$row->url_gambar)}}"  alt=" {{ $row->nama_tenant }}"></a>
+                            <a href="{{route('tenant.menu-tenant',$row->id_tenant)}}"><img src="{{URL::asset('/privates/'.$row->url_gambar)}}" alt=" {{ $row->nama_tenant }}"></a>
                             <span> </span>
                             <!-- <div class="namaTenant">{{$row->nama_kantin}}</div> -->
                             <div class="menuNama mb-3">{{$row->nama_kantin}}</div>

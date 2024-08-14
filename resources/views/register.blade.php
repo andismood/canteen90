@@ -5,10 +5,15 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-lg-6">
-
             <form class="login-form" action="/register" method="POST">
                 @csrf
-                <img src={{URL::asset('/assets/image/logo.png')}} class="mb-4">
+                <img src="{{URL::asset('logo/logo.png')}}" class="mb-4">
+                @if(session()->has('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{session('error')}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
                 <div class="col mb-2">
                     <input type="number" class="form-control  rounded-top @error('id_member')is-invalid @enderror" id="id_member" name="id_member" placeholder="Nomor Induk Siswa" require value="{{ old('id_member') }}">
                     @error('id_member')
@@ -21,6 +26,19 @@
                 <div class="col mb-2">
                     <input type="text" class="form-control @error('nama')is-invalid @enderror" id="nama" name="nama" placeholder="Nama" require value="{{ old('nama') }}">
                     @error('nama')
+                    <div class="invalid-feedback">
+                        {{$message}}
+                    </div>
+                    @enderror
+                </div>
+                <div class="col mb-2">
+                    <select name="id_kelas" id="id_kelas" class="form-select form-select-sm @error('id_kelas')is-invalid @enderror">
+                        <option value="" selected disabled hidden>-- Pilih Kelas --</option>
+                        @foreach ($kelas as $row)
+                        <option value="{{$row->id_kelas}}"> {{$row->id_kelas.' - '.$row->nama_kelas}}</option>
+                        @endforeach
+                    </select>
+                    @error('id_kelas')
                     <div class="invalid-feedback">
                         {{$message}}
                     </div>
@@ -44,72 +62,16 @@
                     </div>
                     @enderror
                 </div>
-
                 <div class="d-grid">
-                    <button type="submit" class="btn btn-primary btn-block">Register</button>
+                    <button type="submit" class="btn btn-primary btn-block">Daftar</button>
                 </div>
-                <small class="d-block text-center mt-2"><a href="/login">Login</a>  or  <a href="/">Back to Home</a> </small>
+                <small class="d-block text-center mt-2"><a href="/login">Masuk</a> atau <a href="/">Kembali Halaman Utama</a> </small>
             </form>
 
         </div>
     </div>
 </div>
-<!--
-<div class="row justify-content-center">
-    <div class="col-md-4">
-        <main class="form-registration w-100 m-auto">
-            <form action="/register" method="POST">
-                @csrf
-                <div class="text-center">
-                    <img class="mb-4" src="../assets/image/logo.png" alt="" width="100" height="100">
-                </div>
 
-                <h1 class="h3 mb-3 fw-normal">Please Registration</h1>
-
-                <div <div class="form-floating">
-                    <input type="number" class="form-control  rounded-top @error('id_member')is-invalid @enderror" id="id_member" name="id_member" placeholder="Nomor Induk Siswa" require value="{{ old('id_member') }}">
-                    <label for=" floatingInput">Nis</label>
-                    @error('id_member')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                <div class="form-floating">
-                    <input type="text" class="form-control @error('nama')is-invalid @enderror" id="nama" name="nama" placeholder="Nama" require value="{{ old('nama') }}">
-                    <label for="floatingInput">Nama</label>
-                    @error('nama')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                <div class="form-floating">
-                    <input type="password" class="form-control @error('password')is-invalid @enderror" id="password" name="password" placeholder="Password" require value="{{ old('password') }}">
-                    <label for="floatingPassword">Password</label>
-                    @error('password')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                <div class="form-floating">
-                    <input type="password" class="form-control rounded-bottom @error('konfirmasi-password')is-invalid @enderror" id="konfirmasi-password" name="konfirmasi-password" placeholder="Password" require value="{{ old('konfirmasi-password') }}">
-                    <label for="floatingPassword">Konfirmasi Password</label>
-                    @error('konfirmasi-password')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-
-                <button class="btn btn-primary w-100 py-2 mt-4" type="submit">Register</button>
-
-            </form>
-            <small class="d-block text-center mt-2 mb-4">Already Login ? <a href="/login">Login</a> </small>
-        </main>
-    </div>
-</div> -->
 
 
 

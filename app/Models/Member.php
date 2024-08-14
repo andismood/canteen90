@@ -11,5 +11,12 @@ class Member extends Model
 
     protected $table = "mst_member" ;
 
-    protected $fillable = ['id_member', 'nama_member'];
+    protected $primaryKey = 'id_member';
+
+    protected $fillable = ['id_member', 'nama_member','id_kelas'];
+
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class, 'id_kelas');
+    }
 }

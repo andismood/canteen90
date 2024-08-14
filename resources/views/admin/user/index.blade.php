@@ -1,27 +1,31 @@
 @extends('admin.layout.main')
 
-@section('title', 'Data User')
+@section('title', '')
 
 @section('container')
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 
     <div class="container-fluid">
-
         <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Data User</h6>
+            <div class="card-header bg-success py-3">
+                <h6 class="m-0 font-weight-bold text-white">Data Pengguna</h6>
             </div>
             <div class="card-body">
-
+                @if(session()->has('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{session('success')}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Kode User</th>
-                                <th>Nama User</th>
-                                <th>Tipe User</th>
+                                <th>Kode </th>
+                                <th>Nama </th>
+                                <th>Tipe Pengguna</th>
                                 <th>Aksi</th>
 
                             </tr>
@@ -35,7 +39,7 @@
                                 <td>{{ $row->nama_user }}</td>
                                 <td>{{ $row->nama_type_user }}</td>
                                 <td>
-                                    <a href="{{ route('tenant.reset', $row->id_user) }}" class="btn btn-warning">Reset Password</a>
+                                    <a href="{{ route('tenant.reset', $row->id_user) }}" class="btn btn-sm btn-warning">Ganti kata sandi</a>
                                 </td>
                             </tr>
                             @endforeach
@@ -43,6 +47,11 @@
                     </table>
                 </div>
             </div>
+            @if($data->hasPages())
+            <div class="card-footer">
+                {{ $data->links() }}
+            </div>
+            @endif
         </div>
     </div>
 

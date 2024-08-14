@@ -1,7 +1,8 @@
 <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
     <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="sidebarMenuLabel">Canteen Connect</h5>
+        <div class="offcanvas-header  bg-dark text-white">
+            <img class="me-2" src="{{URL::asset('logo/logo-sm.png')}}" alt="Canteen Connect" style="height: 30px;">
+            Canteen Connect
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
@@ -11,9 +12,30 @@
                         <svg class="bi">
                             <use xlink:href="#house-fill" />
                         </svg>
-                        Dashboard
+                        Beranda
                     </a>
                 </li>
+                @if(auth()->user()->id_type_user === "mbr" )
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" href="{{ route('profil') }}">
+                        <svg class="bi">
+                            <use xlink:href="#people" />
+                        </svg>
+                        Profil
+                    </a>
+                </li>
+                @endif
+                @if(auth()->user()->id_type_user === "tnt")
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" href="{{ route('tenant.edit',auth()->user()->id_user) }}">
+                        <svg class="bi">
+                            <use xlink:href="#people" />
+                        </svg>
+                        Profil
+                    </a>
+                </li>
+                @endif
+                @if(auth()->user()->id_type_user === "adm")
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2" href="{{ route('jenis-menu') }}">
                         <svg class="bi">
@@ -22,34 +44,52 @@
                         Jenis Menu
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" href="{{route('user')}}">
+                        <svg class="bi">
+                            <use xlink:href="#file-earmark-text" />
+                        </svg>
+                        Pengguna
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" href="{{route('tipe-user')}}">
+                        <svg class="bi">
+                            <use xlink:href="#file-earmark-text" />
+                        </svg>
+                        Tipe Pengguna
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2" href="{{ route('member') }}">
                         <svg class="bi">
-                            <use xlink:href="#cart" />
+                            <use xlink:href="#people" />
                         </svg>
-                        Member
+                        Siswa
                     </a>
                 </li>
-
-            </ul>
-
-            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-body-secondary text-uppercase">
-                <span>Saved reports</span>
-                <a class="link-secondary" href="#" aria-label="Add a new report">
-                    <svg class="bi">
-                        <use xlink:href="#plus-circle" />
-                    </svg>
-                </a>
-            </h6>
-            <ul class="nav flex-column mb-auto">
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" href="{{ route('kelas') }}">
+                        <svg class="bi">
+                            <use xlink:href="#file-earmark-text" />
+                        </svg>
+                        Kelas
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2" href="{{ route('tenant') }}">
                         <svg class="bi">
-                            <use xlink:href="#file-earmark-text" />
+                            <use xlink:href="#people" />
                         </svg>
                         Tenant
                     </a>
                 </li>
+                @endif
+
+
+
+                @if(auth()->user()->id_type_user === "adm" || auth()->user()->id_type_user === "tnt")
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2" href="{{route('menu')}}">
                         <svg class="bi">
@@ -58,54 +98,51 @@
                         Menu
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2" href="{{route('user')}}">
-                        <svg class="bi">
-                            <use xlink:href="#file-earmark-text" />
-                        </svg>
-                        User
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2" href="{{route('tipe-user')}}">
-                        <svg class="bi">
-                            <use xlink:href="#file-earmark-text" />
-                        </svg>
-                        Tipe User
-                    </a>
-                </li>
+                @endif
+
             </ul>
+
+
 
             <hr class="my-3">
 
             <ul class="nav flex-column mb-auto">
+                @if(auth()->user()->id_type_user === "adm" || auth()->user()->id_type_user === "mbr")
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2" href="{{route('pesanan')}}">
                         <svg class="bi">
-                            <use xlink:href="#file-earmark-text" />
+                            <use xlink:href="#cart" />
                         </svg>
                         Pesanan
                     </a>
                 </li>
+                @endif
+                @if(auth()->user()->id_type_user === "adm" || auth()->user()->id_type_user === "tnt" || auth()->user()->id_type_user === "mbr")
+
                 <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2" href="#">
+                    <a class="nav-link d-flex align-items-center gap-2" href="{{route('pesanan.bayar')}}">
                         <svg class="bi">
-                            <use xlink:href="#gear-wide-connected" />
+                            <use xlink:href="#file-earmark-text" />
                         </svg>
+                        @if(auth()->user()->id_type_user === "mbr")
+                        Riwayat Pesanan
+                        @else
                         Transaksi
+                        @endif
+
                     </a>
                 </li>
                 <li class="nav-item">
-                    <form action="/logout" method="post">
-                        @csrf
-                        <button type="submit" class="nav-link d-flex align-items-center gap-2">
-                            <svg class="bi">
-                                <use xlink:href="#door-closed" />
-                            </svg>
-                            Logout
-                        </button>
-                    </form>
+                    @csrf
+                    <a class="nav-link d-flex align-items-center gap-2" href="{{route('logout')}}">
+                        <svg class="bi">
+                            <use xlink:href="#door-closed" />
+                        </svg>
+                        Keluar
+                    </a>
                 </li>
+                @endif
+
             </ul>
         </div>
     </div>

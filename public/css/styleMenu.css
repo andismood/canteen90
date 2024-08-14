@@ -1,3 +1,8 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: #333;
+}
 .gambar {
     position: relative;
     display: inline-block;
@@ -176,5 +181,72 @@ section.portfolio {
     padding: none;
     margin: none;
 }
+.bill .bordered-span {
+    border: none;
+    border-radius: 10px;
+}
+
+.detail .form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.detail .form-group label {
+    margin-right: 1rem;
+    width: 50px;
+
+}
+
+.detail .form-group .form-select {
+    flex: 1;
+    width: 150px;
+
+}
+
+.total-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0.5rem;
+    background-color: #28a745;
+    /* Adjust color as needed */
+    border-radius: 0.25rem;
+    color: white;
+}
+
+.total-text {
+    font-size: 1.25rem;
+    /* Adjust font size as needed */
+}
+
+@media (max-width: 576px) {
+    .total-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .total-text {
+        font-size: 1rem;
+        /* Adjust font size for smaller screens */
+    }
+}
+
+.qrimage {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+/* Gaya untuk gambar */
+.qrimageTenent {
+        width: 90%;
+        height: 100% !important;
+        box-shadow: none;
+        display: block;
+        margin: auto;
+        object-fit: cover;
+}
+
 
 

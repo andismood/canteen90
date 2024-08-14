@@ -2,18 +2,21 @@
 
 
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\KelasController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\TipeUserController;
 use App\Http\Controllers\JenisMenuController;
 use App\Http\Controllers\DashboardAdminController;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,12 +29,18 @@ use App\Http\Controllers\DashboardAdminController;
 */
 
 Route::get('/', function () {
-    return view('home');
+    if (Auth::check()) {
+        return redirect()->intended('dashboard');
+    } else {
+        return view('home');
+    }
+
 });
+
 
 Route::get('/login', [LoginController::class,'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('authenticate');
-Route::post('/logout', [LoginController::class, 'logout']);
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
 Route::get('/register', [RegisterController::class, 'index'])->middleware('guest');
 Route::post('/register', [RegisterController::class, 'store']);
@@ -50,6 +59,12 @@ Route::middleware('auth')->group(
         Route::controller(PesananController::class)->prefix('pesanan')->group(function () {
             Route::get('', 'index')->name('pesanan');
             Route::get('cek-pesanan', 'getPesanan')->name('pesanan.cek');
+            Route::get('cek-pilihan', 'cekPilihPesanan')->name('pesanan.pilihan');
+            Route::post('konfirmasi', 'KonfirmasiPembayaran')->name('pesanan.konfirmasi');
+            Route::get('pembayaran', 'Pembayaran')->name('pesanan.bayar');
+            Route::post('pembayaran', 'lunas')->name('pesanan.lunas');
+            Route::get('detail-pesanan', 'detailPesanan')->name('pesanan.detail');
+            Route::delete('hapus-pesanan', 'hapusPesanan')->name('pesanan.hapus');
         });
 
 
@@ -71,6 +86,11 @@ Route::middleware('auth')->group(
             Route::get('hapus/{id}', 'hapus')->name('member.hapus');
         });
 
+        Route::controller(ProfilController::class)->prefix('profil')->group(function () {
+            Route::get('', 'index')->name('profil');
+            Route::post('edit', 'update')->name('profil.update');
+        });
+
         Route::controller(TenantController::class)->prefix('tenant')->group(function () {
             Route::get('', 'index')->name('tenant');
             Route::get('tambah', 'tambah')->name('tenant.tambah');
@@ -78,8 +98,8 @@ Route::middleware('auth')->group(
             Route::get('edit/{id}', 'edit')->name('tenant.edit');
             Route::post('edit/{id}', 'update')->name('tenant.tambah.update');
             Route::get('hapus/{id}', 'hapus')->name('tenant.hapus');
-
             Route::get('menu/{id_tenant}','menu')->name('tenant.menu-tenant');
+            Route::get('tenant-byid', 'getById')->name('tenant.byid');
         });
 
         Route::controller(UserController::class)->prefix('user')->group(function () {
@@ -89,6 +109,15 @@ Route::middleware('auth')->group(
 
         Route::controller(TipeUserController::class)->prefix('tipe-user')->group(function () {
             Route::get('', 'index')->name('tipe-user');
+        });
+
+        Route::controller(KelasController::class)->prefix('kelas')->group(function () {
+            Route::get('', 'index')->name('kelas');
+            Route::get('tambah', 'tambah')->name('kelas.tambah');
+            Route::post('tambah', 'simpan')->name('kelas.tambah.simpan');
+            Route::post('edit/{id}', 'update')->name('kelas.tambah.update');
+            Route::get('edit/{id}', 'edit')->name('kelas.edit');
+            Route::get('hapus/{id}', 'hapus')->name('kelas.hapus');
         });
 
         Route::controller(MenuController::class)->prefix('menu')->group(function () {

@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Canteen Connect</title>
-
+    <link rel="icon" href="{{ asset('logo/favicon.ico') }}" type="image/x-icon">
     <link href="{{ asset('assets/dist/css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 
@@ -15,8 +15,10 @@
     <!-- Custom styles for this template -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link href="/css/dashboard.css" rel="stylesheet">
-    <link href="/css/styleMenu.css" rel="stylesheet">
+    <!-- <link href="/css/dashboard.css" rel="stylesheet"> -->
+    <!-- <link href="/css/styleMenu.css" rel="stylesheet"> -->
+    <link href="{{asset('css/dashboard.css')}}" rel="stylesheet">
+    <link href="{{asset('css/styleMenu.css')}}" rel="stylesheet">
 
 
 </head>

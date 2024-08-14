@@ -3,24 +3,41 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
-use App\Models\PesananModel;
+use App\Models\User;
 use App\Models\Tenant;
+use App\Models\Pesanan;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use PhpParser\Node\Stmt\TryCatch;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardAdminController extends Controller
 {
     public function index(){
-        $menu = Menu::getAllMenu();
-        return view('admin.index', ['data' => $menu]);
+        if (Auth::check()) {
+            $menu = Menu::getAllMenu();
+            return view('admin.index', ['data' => $menu]);
+        }
+        return view('login.index');
     }
 
     public function tenant()
     {
-        $tenant = Tenant::all();
+        if (Auth::check()) {
+            $id = Auth::id();
+            $usr = User::find($id);
+            $type = $usr->id_type_user;
+            $query = Tenant::where('flag_aktif', '1');
+            if ($type === "tnt") {
+                $tnt = Tenant::where('id_user', $id)->first();
+                $idTenant = $tnt->id_tenant;
+                $query->where('id_tenant', $idTenant);
+            }
+        $tenant = $query->get();
         return view('admin.dashboard.index', ['data' => $tenant]);
+        }
+        return view('login.index');
     }
+
 
     public function getMenuById(Request $request)
     {
@@ -35,6 +52,7 @@ class DashboardAdminController extends Controller
                 'menu' => $menu
             ]);
         }
+        return view('login.index');
     }
 
     public function simpanPesanan(Request $request){
@@ -49,11 +67,12 @@ class DashboardAdminController extends Controller
             'catatan_menu' => $request->catatan_menu
             ];
 
-            PesananModel::create($pesan);
+            Pesanan::create($pesan);
             $data = [
                 'message'=>"Data Berhasil disimpan"
             ];
             return $data;
         }
+        return view('login.index');
     }
 }

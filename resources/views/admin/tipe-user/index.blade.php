@@ -1,6 +1,6 @@
 @extends('admin.layout.main')
 
-@section('title', 'Data Tipe User')
+@section('title', '')
 
 @section('container')
 
@@ -9,8 +9,8 @@
     <div class="container-fluid">
 
         <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Data Tipe User</h6>
+            <div class="card-header bg-success py-3">
+                <h6 class="m-0 font-weight-bold text-white">Data Tipe Pengguna</h6>
             </div>
             <div class="card-body">
 
@@ -19,8 +19,8 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Kode Tipe User</th>
-                                <th>Nama Tipe User</th>
+                                <th>Kode Tipe Pengguna</th>
+                                <th>Nama Tipe Pengguna</th>
                             </tr>
                         </thead>
                         <tbody>

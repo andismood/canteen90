@@ -10,33 +10,32 @@
 
         <div class="card shadow mb-4">
             <div class="card-header bg-success py-3">
-                <h6 class="m-0 font-weight-bold text-white">Data Siswa</h6>
+                <h6 class="m-0 font-weight-bold text-white">Data Kelas</h6>
             </div>
             <div class="card-body">
-                <a href="{{route('member.tambah')}}" class="btn btn-sm btn-success mb-3">Tambah</a>
+                <a href="{{route('kelas.tambah')}}" class="btn btn-sm btn-success mb-3">Tambah</a>
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>NIS</th>
-                                <th>Nama Siswa</th>
-                                <th>Id kelas</th>
+                                <th>Id Kelas</th>
+                                <th>Nama Kelas</th>
+                                <th>Keterangan</th>
                                 <th>Aksi</th>
-
                             </tr>
                         </thead>
                         <tbody>
                             @php($no = 1)
                             @foreach ($data as $row)
                             <tr>
-                                <th>{{ $no++ }}</th>
-                                <td>{{ $row->id_member }}</td>
-                                <td>{{ $row->nama_member }}</td>
-                                <td>{{ $row->id_kelas}}</td>
+                                <td>{{ $no++ }}</td>
+                                <td>{{ $row->id_kelas }}</td>
+                                <td>{{ $row->nama_kelas }}</td>
+                                <td>{{ $row->keterangan }}</td>
                                 <td>
-                                    <a href="{{ route('member.edit', $row->id_member) }}" class="btn btn-sm btn-warning">Ubah</a>
-                                    <a href="{{ route('member.hapus', $row->id_member) }}" class="btn btn-sm btn-danger">Hapus</a>
+                                    <a href="{{ route('kelas.edit', $row->id_kelas) }}" class="btn btn-sm btn-warning">Ubah</a>
+                                    <a href="{{ route('kelas.hapus', $row->id_kelas) }}" class="btn btn-sm btn-danger">Hapus</a>
                                 </td>
                             </tr>
                             @endforeach

@@ -9,11 +9,11 @@
     <div class="container-fluid">
 
         <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Data Menu</h6>
+            <div class="card-header bg-success py-3">
+                <h6 class="m-0 font-weight-bold text-white">Data Menu</h6>
             </div>
             <div class="card-body">
-                <a href="{{route('menu.tambah')}}" class="btn btn-primary mb-3">Tambah</a>
+                <a href="{{route('menu.tambah')}}" class="btn btn-sm btn-success mb-3">Tambah</a>
                 <div class="rxjs-table">
                     <div className="rxjs-table-body">
                         <div class="table-responsive">
@@ -24,8 +24,8 @@
                                         <th>Nama Menu</th>
                                         <th>Jenis Menu</th>
                                         <th>Harga</th>
+                                        <th>Pemilik</th>
                                         <th>Tenant</th>
-                                        <th>Kantin</th>
                                         <th>Status</th>
                                         <th>gambar</th>
                                         <th>Aksi</th>
@@ -51,12 +51,14 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <img src="{{ $row->nama_gambar }}" alt="{{ $row->nama_menu }}" style="max-width: 80px; max-height: 80px;">
+                                            <img src="{{ URL::asset('/images/'.$row->nama_gambar) }}" alt="{{ $row->nama_menu }}" style="max-width: 80px; max-height: 80px;">
                                         </td>
 
                                         <td>
-                                            <a href="{{ route('menu.edit', $row->id_menu) }}" class="btn btn-warning m-1">Edit</a>
-                                            <a href="{{ route('menu.hapus', $row->id_menu) }}" class="btn btn-danger">Hapus</a>
+                                            <a href="{{ route('menu.edit', $row->id_menu) }}" class="btn btn-sm btn-warning m-1">Ubah</a>
+                                            @if(auth()->user()->id_type_user === "adm")
+                                            <a href="{{ route('menu.hapus', $row->id_menu) }}" class="btn btn-sm btn-danger">Hapus</a>
+                                            @endif
                                         </td>
                                     </tr>
                                     @endforeach
@@ -66,6 +68,11 @@
                     </div>
                 </div>
             </div>
+            @if($data->hasPages())
+            <div class="card-footer">
+                {{ $data->links() }}
+            </div>
+            @endif
         </div>
     </div>
 

@@ -6,7 +6,7 @@
     <div class="row justify-content-center">
         <div class="col-lg-6">
             <form class="login-form">
-                <img src={{URL::asset('/assets/image/logo.png')}}>
+                <img src="{{URL::asset('/logo/logo.png')}}">
 
                 <div class="judul mt-3">
                     Kantin SMA Labschool Kebayoran
@@ -15,11 +15,11 @@
                     " Makan Bergizi "
                 </div>
                 <div class="d-grid">
-                    <a href="{{('/login')}}" class="btn btn-primary mb-3">Login</a>
+                    <a href="{{('/login')}}" class="btn btn-primary mb-3">Masuk</a>
                 </div>
 
                 <div class="d-grid">
-                    <a href="{{('/register')}}" class="btn btn-primary mb-3">Sign Up</a>
+                    <a href="{{('/register')}}" class="btn btn-primary mb-3">Daftar</a>
                 </div>
 
             </form>
