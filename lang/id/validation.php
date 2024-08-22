@@ -113,7 +113,7 @@ return [
     'string'      => ':attribute harus berupa string.',
     'timezone'    => ':attribute harus berisi zona waktu yang valid.',
     'unique'      => ':attribute sudah ada sebelumnya.',
-    'uploaded'    => ':attribute gagal diunggah.',
+    'uploaded'    => ':attribute gagal diunggah, tipe file harus jpg,jpeg & png dan file size 2 M',
     'url'         => 'Format :attribute tidak valid.',
     'uuid'        => ':attribute harus merupakan UUID yang valid.',
 

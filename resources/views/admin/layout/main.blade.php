@@ -84,7 +84,8 @@
 
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <div class="d-sm-flex align-items-center justify-content-between mt-2">
-                    <h1 class="h3 mb-0 text-gray-800"> @yield('title')</h1>
+                    <span class="text-gray-800" style="font-family:timesnewroman;"></span>
+                    <h5 class="mb-0 text-gray-800 " style="font-family:timesnewroman;">@yield('title')</h5>
                 </div>
                 @yield('container')
             </main>

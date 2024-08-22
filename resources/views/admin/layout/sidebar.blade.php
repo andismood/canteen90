@@ -3,7 +3,7 @@
         <div class="offcanvas-header  bg-dark text-white">
             <img class="me-2" src="{{URL::asset('logo/logo-sm.png')}}" alt="Canteen Connect" style="height: 30px;">
             Canteen Connect
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Close"></button>
+            <button type="button" class="btn-close btn-sm bg-white" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
             <ul class="nav flex-column">
@@ -15,7 +15,7 @@
                         Beranda
                     </a>
                 </li>
-                @if(auth()->user()->id_type_user === "mbr" )
+                @if(auth()->user()->id_type_user === "mbr" || auth()->user()->id_type_user === "adm")
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2" href="{{ route('profil') }}">
                         <svg class="bi">

@@ -4,15 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Models\Kelas;
 use Illuminate\Http\Request;
+use App\Services\GetUserInfo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class KelasController extends Controller
 {
+    protected $getUserInfo;
+
+    public function __construct(GetUserInfo $getUserInfo)
+    {
+        $this->getUserInfo = $getUserInfo;
+    }
+
     public function index(){
         if (Auth::check()) {
-        $kelas = Kelas::paginate(10);
-        return view('admin.kelas.index', ['data' => $kelas]);
+            $kelas = Kelas::paginate(10);
+            $userInfo = $this->getUserInfo->getUserInfo();
+            $nama = isset($userInfo['nama']) ? $userInfo['nama'] : '';
+            $tipe = isset($userInfo['tipe']) ? $userInfo['tipe'] : '';
+            return view('admin.kelas.index', ['data' => $kelas, 'nama' => $nama, 'tipe' => $tipe]);
         }
         return view('login.index');
     }
@@ -26,12 +37,12 @@ class KelasController extends Controller
     public function simpan(Request $request){
         if (Auth::check()) {
         $request->validate([
-            'kode_kelas' => ['required', 'max:10', 'unique:mst_kelas'],
+            'id_kelas' => ['required', 'max:10', 'unique:mst_kelas'],
             'nama_kelas' => ['required', 'max:25'],
             'keterangan' => ['max:200']
         ]);
         $data = [
-            'id_kelas' => $request->kode_kelas,
+            'id_kelas' => $request->id_kelas,
             'nama_kelas' => $request->nama_kelas,
             'keterangan' => $request->keterangan
         ];
@@ -52,12 +63,10 @@ class KelasController extends Controller
     {
         if (Auth::check()) {
         $request->validate([
-            'kode_kelas' => ['required', 'max:10', 'unique:mst_kelas'],
             'nama_kelas' => ['required', 'max:25'],
             'keterangan' => ['max:200']
         ]);
         $data = [
-            'id_kelas' => $request->kode_kelas,
             'nama_kelas' => $request->nama_kelas,
             'keterangan' => $request->keterangan
         ];

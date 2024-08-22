@@ -9,12 +9,12 @@
         <div class="col-12">
             <div class="card shadow mb-4">
                 <div class="card-header bg-success py-3">
-                    <h6 class="m-0 font-weight-bold text-white">{{ isset($member) ? 'Form Edit Siswa' : 'Form Tambah Siswa' }}</h6>
+                    <h6 class="m-0 font-weight-bold text-white ">{{ isset($member) ? 'Form Edit Siswa' : 'Form Tambah Siswa' }}</h6>
                 </div>
                 <div class="card-body">
                     <div class="form-group mb-2">
                         <label for="id_member">NIS</label>
-                        <input type="text" class="form-control form-control-sm @error('id_member')is-invalid @enderror" id=" id_member" name="id_member" value="{{ isset($member) ? $member->id_member: '' }}">
+                        <input type="text" class="form-control form-control-sm @error('id_member')is-invalid @enderror" id=" id_member" name="id_member" value="{{ isset($member) ? $member->id_member: '' }}" {{ isset($member) ? "readonly" : '' }}>
                         @error('id_member')
                         <div class="invalid-feedback">
                             {{$message}}

@@ -17,3 +17,6 @@ yarn-error.log
 /.idea
 /.vscode
 /db
+/public/gambar-qris
+/public/images
+/public/privates

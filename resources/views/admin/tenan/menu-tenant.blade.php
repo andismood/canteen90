@@ -154,7 +154,7 @@
 
                     <div class="row">
                         <div class="col-sm-12">
-                            <input type="text" class="form-control form-control-sm"  id="catatan" name="catatan" placeholder="Notes">
+                            <input type="text" class="form-control form-control-sm" id="catatan" name="catatan" placeholder="Notes">
                         </div>
                     </div>
 
@@ -494,7 +494,28 @@
                 });
                 return;
             }
+            const maxSizeInMB = 2;
+            const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+            if (file.size > maxSizeInBytes) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: `File terlalu besar. Maksimum ukuran file adalah ${maxSizeInMB} MB.`,
+                });
+                return;
+            }
+            const fileName = file.name;
+            const fileExtension = fileName.split('.').pop().toLowerCase();
+            const allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf'];
 
+            if (!allowedExtensions.includes(fileExtension)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: 'Format file tidak diizinkan. Harap upload file dengan ekstensi: ' + allowedExtensions.join(', '),
+                });
+                return;
+            }
             if (fileInput.files.length > 0) {
                 const formData = new FormData();
                 formData.append('jenis_bayar', "qris");
@@ -517,11 +538,24 @@
                         $('#billModal').modal('hide');
                         $('#qrisModal').modal('hide');
                     },
-                    error: function(response) {
+                    error: function(xhr, status, error) {
+                        let errorMessage = 'An unknown error occurred.';
+
+                        try {
+                            let response = JSON.parse(xhr.responseText);
+
+                            if (response.message) {
+                                errorMessage = response.message;
+                            } else if (response.errors && response.errors.qrcode && response.errors.qrcode.length > 0) {
+                                errorMessage = response.errors.qrcode[0];
+                            }
+                        } catch (e) {
+                            console.error('Error parsing the response:', e);
+                        }
                         Swal.fire({
                             icon: 'error',
                             title: 'GAGAL',
-                            text: 'Terjadi kesalahan saat mengkonfirmasi pesanan.' + response.message,
+                            text: errorMessage + 'File harus berformat jpg, jpeg atau png',
                         });
                     }
                 });
@@ -532,31 +566,45 @@
     //Pembayaran melalui mode cash
     function cash(tenantId) {
         if (tenantId != "") {
-            $.ajax({
-                url: "{{ route('pesanan.konfirmasi') }}",
-                method: "POST",
-                data: {
-                    jenis_bayar: "cash",
-                    id_tenant: tenantId,
-                    _token: "{{ csrf_token() }}"
-                },
-                success: function(response) {
-                    Swal.fire({
-                        icon: 'success',
-                        type: 'success',
-                        title: 'Success',
-                        text: response.message,
-                    });
-                    $('#billModal').modal('hide');
-                },
-                error: function(response) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'GAGAL',
-                        text: 'Terjadi kesalahan saat mengkonfirmasi pesanan.' + response.message,
+            Swal.fire({
+                title: 'Informasi',
+                text: "Pembayaran melalui cash ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ route('pesanan.konfirmasi') }}",
+                        method: "POST",
+                        data: {
+                            jenis_bayar: "cash",
+                            id_tenant: tenantId,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function(response) {
+                            Swal.fire({
+                                icon: 'success',
+                                type: 'success',
+                                title: 'Success',
+                                text: response.message,
+                            });
+                            $('#billModal').modal('hide');
+                        },
+                        error: function(response) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'GAGAL',
+                                text: 'Terjadi kesalahan saat mengkonfirmasi pesanan.' + response.message,
+                            });
+                        }
                     });
                 }
             });
+
+
         }
     }
 </script>

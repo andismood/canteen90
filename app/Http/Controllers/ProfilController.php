@@ -6,17 +6,34 @@ use view;
 use App\Models\Kelas;
 use App\Models\Member;
 use Illuminate\Http\Request;
+use App\Services\GetUserInfo;
 use Illuminate\Support\Facades\Auth;
 
 class ProfilController extends Controller
 {
+    protected $getUserInfo;
+
+    public function __construct(GetUserInfo $getUserInfo)
+    {
+        $this->getUserInfo = $getUserInfo;
+    }
+
     public function index()
     {
         if(Auth::check()){
-            $memberId = Auth::id();
-            $member = Member::find($memberId);
-            $kelas = Kelas::get();
-            return view("admin.profil.index", ['member' => $member, 'kelas' => $kelas]);
+            $Id = Auth::id();
+            $userInfo = $this->getUserInfo->getUserInfo();
+            $nama = isset($userInfo['nama']) ? $userInfo['nama'] : '';
+            $tipe = isset($userInfo['tipe']) ? $userInfo['tipe'] : '';
+            if($tipe->id_type_user === 'adm'){
+                return view("admin.profil.adm", ['user' => $Id, 'nama' => $nama, 'tipe' => $tipe]);
+            }else if($tipe->id_type_user === 'mbr'){
+                $member = Member::find($Id);
+                $kelas = Kelas::get();
+                return view("admin.profil.index", ['member' => $member, 'kelas' => $kelas, 'nama' => $nama, 'tipe' => $tipe]);
+            }else{
+                return view('login.index');
+            }
         }
         return view('login.index');
     }

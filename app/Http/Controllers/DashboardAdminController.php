@@ -4,14 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Menu;
 use App\Models\User;
+use App\Models\Member;
 use App\Models\Tenant;
 use App\Models\Pesanan;
 use Illuminate\Http\Request;
-use PhpParser\Node\Stmt\TryCatch;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Services\GetUserInfo;
 
 class DashboardAdminController extends Controller
 {
+
+    protected $getUserInfo;
+
+    public function __construct(GetUserInfo $getUserInfo)
+    {
+        $this->getUserInfo = $getUserInfo;
+    }
+
+
     public function index(){
         if (Auth::check()) {
             $menu = Menu::getAllMenu();
@@ -32,8 +43,11 @@ class DashboardAdminController extends Controller
                 $idTenant = $tnt->id_tenant;
                 $query->where('id_tenant', $idTenant);
             }
-        $tenant = $query->get();
-        return view('admin.dashboard.index', ['data' => $tenant]);
+            $userInfo = $this->getUserInfo->getUserInfo();
+            $nama = isset($userInfo['nama']) ? $userInfo['nama'] : '';
+            $tipe = isset($userInfo['tipe']) ? $userInfo['tipe'] : '';
+            $tenant = $query->get();
+        return view('admin.dashboard.index', ['data' => $tenant, 'nama'=> $nama, 'tipe' => $tipe ]);
         }
         return view('login.index');
     }

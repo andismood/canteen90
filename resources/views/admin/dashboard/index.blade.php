@@ -1,6 +1,6 @@
 @extends('admin.layout.main')
 
-@section('title', '')
+@section('title', 'Halo '.$nama .' ('.$tipe->nama_type_user.')')
 
 @section('container')
 
@@ -22,7 +22,7 @@
                             <a href="{{route('tenant.menu-tenant',$row->id_tenant)}}"><img src="{{URL::asset('/privates/'.$row->url_gambar)}}" alt=" {{ $row->nama_tenant }}"></a>
                             <span> </span>
                             <!-- <div class="namaTenant">{{$row->nama_kantin}}</div> -->
-                            <div class="menuNama mb-3">{{$row->nama_kantin}}</div>
+                            <div class="menuNama mt-2 mb-3">{{$row->nama_kantin}}</div>
                             <!-- <div class="menuHarga">{{"Rp. " .$row->harga_jual}}</div> -->
 
                             <!-- @if ($row->status_menu == "0")

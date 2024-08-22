@@ -3,12 +3,22 @@ body {
     font-size: 14px;
     color: #333;
 }
+input[type="text"] {
+    border: 1px solid #c0c6cc;
+    padding: 5px;
+    border-radius: 4px;
+    outline: none;
+}
+
+input[type="text"]:focus {
+    border-color: #0056b3;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
 .gambar {
     position: relative;
     display: inline-block;
     overflow: hidden;
     font-family: serif, System;
-    /* border: 1px solid rgb(197, 247, 182); */
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -246,6 +256,9 @@ section.portfolio {
         display: block;
         margin: auto;
         object-fit: cover;
+}
+.offcanvas-header .btn-close {
+    color: white !important;
 }
 
 

@@ -1,6 +1,5 @@
 @extends('admin.layout.main')
-
-@section('title', '')
+@section('title', 'Halo '.$nama .' ('.$tipe->nama_type_user.')')
 
 @section('container')
 

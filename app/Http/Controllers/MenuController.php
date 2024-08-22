@@ -3,16 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
+use App\Models\User;
 use App\Models\Tenant;
 use App\Models\JenisMenu;
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Services\GetUserInfo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 
 class MenuController extends Controller
 {
+
+    protected $getUserInfo;
+
+    public function __construct(GetUserInfo $getUserInfo)
+    {
+        $this->getUserInfo = $getUserInfo;
+    }
+
+
     public function index()
     {
         if (Auth::check()) {
@@ -30,9 +40,12 @@ class MenuController extends Controller
             if ($type === "tnt") {
                 $menu->where('c.id_tenant', $idTenant);
             }
-            $result = $menu->paginate(10);;
+            $result = $menu->paginate(10);
+            $userInfo = $this->getUserInfo->getUserInfo();
+            $nama = isset($userInfo['nama']) ? $userInfo['nama'] : '';
+            $tipe = isset($userInfo['tipe']) ? $userInfo['tipe'] : '';
             // $menu = Menu::getAllMenu();
-            return view("admin.menu.index", ['data' => $result]);
+            return view("admin.menu.index", ['data' => $result, 'nama' => $nama, 'tipe' => $tipe]);
         }
         return view('login.index');
     }

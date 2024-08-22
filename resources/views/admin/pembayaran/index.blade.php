@@ -1,6 +1,6 @@
 @extends('admin.layout.main')
 
-@section('title', '')
+@section('title', 'Halo '.$nama .' ('.$tipe->nama_type_user.')')
 
 @section('container')
 
@@ -66,6 +66,7 @@
                                     @php($no = 1)
                                     @foreach ($data as $row)
                                     <tr>
+
                                         <th>{{ $no++ }}</th>
                                         <td>{{ $row->id_member }}</td>
                                         <td>{{ $row->nama_member }}</td>
@@ -82,10 +83,10 @@
                                         </td>
                                         <td>{{ $row->nama_kantin }}</td>
                                         <td>
-                                            @if($row->status_bayar === "0")
-                                            <span class="text-black bg-warning ps-2 pe-2 py-1" style="border-radius: 20px">BELUM</span>
-                                            @else
+                                            @if($row->status_bayar === "1")
                                             <span class="text-white bg-success ps-2 pe-2 py-1" style="border-radius: 20px">SUDAH</span>
+                                            @elseif($row->status_bayar === "0")
+                                            <span class="text-black bg-warning ps-2 pe-2 py-1" style="border-radius: 20px">BELUM</span>
                                             @endif
 
                                         </td>
@@ -315,7 +316,7 @@
                         icon: 'error',
                         width: 300,
                         title: 'GAGAL',
-                        text: 'error saat konfirmasi data karena ' + error
+                        text: 'error detail pesanan ' + error
                     });
                 }
             });

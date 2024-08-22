@@ -1,6 +1,5 @@
 @extends('admin.layout.main')
-
-@section('title', '')
+@section('title', 'Halo '.$nama .' ('.$tipe->nama_type_user.')')
 
 @section('container')
 
@@ -39,7 +38,7 @@
                                 <td>{{ $row->nama_user }}</td>
                                 <td>{{ $row->nama_type_user }}</td>
                                 <td>
-                                    <a href="{{ route('tenant.reset', $row->id_user) }}" class="btn btn-sm btn-warning">Ganti kata sandi</a>
+                                    <a href="{{ route('user.reset', $row->id_user) }}" class="btn btn-sm btn-warning">Ganti kata sandi</a>
                                 </td>
                             </tr>
                             @endforeach

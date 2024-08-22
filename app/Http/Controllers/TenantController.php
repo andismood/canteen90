@@ -3,20 +3,31 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\Tenant;
 use App\Models\User;
+use App\Models\Tenant;
 use Illuminate\Http\Request;
+use App\Services\GetUserInfo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class TenantController extends Controller
 {
+    protected $getUserInfo;
+
+    public function __construct(GetUserInfo $getUserInfo)
+    {
+        $this->getUserInfo = $getUserInfo;
+    }
+
     public function index()
     {
         if (Auth::check()) {
         $tenant = Tenant::paginate(10);
-        return view("admin.tenan.index", ['data' => $tenant]);
+            $userInfo = $this->getUserInfo->getUserInfo();
+            $nama = isset($userInfo['nama']) ? $userInfo['nama'] : '';
+            $tipe = isset($userInfo['tipe']) ? $userInfo['tipe'] : '';
+        return view("admin.tenan.index", ['data' => $tenant, 'nama' => $nama, 'tipe' => $tipe]);
         }
         return view('login.index');
     }
@@ -132,7 +143,16 @@ class TenantController extends Controller
             'flag_aktif' => 'required',
             'nama_tenant' => ['required', 'max:30'],
             'nama_kantin' => ['required', 'max:25'],
-        ]);
+            ], [
+                'nm_gambar.file' => 'File gambar tidak valid.',
+                'nm_gambar.image' => 'File gambar harus berupa gambar.',
+                'nm_gambar.mimes' => 'File gambar harus berupa salah satu dari: jpeg, png, jpg, gif.',
+                'nm_gambar.max' => 'Ukuran file gambar harus kurang dari 2MB.',
+                'qrcode_image.max' => 'Ukuran file QR Code harus kurang dari 2MB.',
+                'qrcode_image.file' => 'File gambar tidak valid.',
+                'qrcode_image.image' => 'File gambar harus berupa gambar.',
+                'qrcode_image.mimes' => 'File gambar harus berupa salah satu dari: jpeg, png, jpg, gif.',
+            ]);
 
         $data = [
             'nama_tenant' => $request->nama_tenant,

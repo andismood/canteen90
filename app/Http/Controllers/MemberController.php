@@ -5,17 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\Kelas;
 use App\Models\Member;
 use Illuminate\Http\Request;
+use App\Services\GetUserInfo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class MemberController extends Controller
 {
+    protected $getUserInfo;
+
+    public function __construct(GetUserInfo $getUserInfo)
+    {
+        $this->getUserInfo = $getUserInfo;
+    }
+
     public function index()
     {
         if (Auth::check()) {
         $member= Member::paginate(10);
-        return view("admin.member.index", ['data' => $member]);
+            $userInfo = $this->getUserInfo->getUserInfo();
+            $nama = isset($userInfo['nama']) ? $userInfo['nama'] : '';
+            $tipe = isset($userInfo['tipe']) ? $userInfo['tipe'] : '';
+        return view("admin.member.index", ['data' => $member, 'nama' => $nama, 'tipe' => $tipe]);
         }
         return view('login.index');
     }

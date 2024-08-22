@@ -12,11 +12,19 @@ use App\Models\Tenant;
 use App\Models\Pesanan;
 use App\Models\Pembayaran;
 use Illuminate\Http\Request;
+use App\Services\GetUserInfo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class PesananController extends Controller
 {
+    protected $getUserInfo;
+
+    public function __construct(GetUserInfo $getUserInfo)
+    {
+        $this->getUserInfo = $getUserInfo;
+    }
+
     public function index()
     {
         if (Auth::check()) {
@@ -28,7 +36,10 @@ class PesananController extends Controller
                 ->whereDate('tbl_pesanan.created_at','=', $requestDate)
                 ->where('tbl_pesanan.id_user', '=', $memberId)
                 ->paginate(10);
-            return view("admin.pesanan.index", ['data' => $menu]);
+            $userInfo = $this->getUserInfo->getUserInfo();
+            $nama = isset($userInfo['nama']) ? $userInfo['nama'] : '';
+            $tipe = isset($userInfo['tipe']) ? $userInfo['tipe'] : '';
+            return view("admin.pesanan.index", ['data' => $menu, 'nama' => $nama, 'tipe' => $tipe]);
         }
         return view('login.index');
     }
@@ -127,7 +138,7 @@ public function cekPilihPesanan(Request $request){
     public function KonfirmasiPembayaran(Request $request){
         $rules = [
             'id_tenant' => 'required', // Validasi id_tenant sebagai integer dan pastikan ada di tabel tenants
-            'qrcode' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi file qrcode jika ada
+            'qrcode' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Validasi file qrcode jika ada
         ];
 
         if (Auth::check()) {
@@ -178,7 +189,7 @@ public function cekPilihPesanan(Request $request){
                     'jumlah_bayar' => 0,
                     'total_bayar'=> $totalHarga,
                     'kembali' => 0,
-                    'status_bayar' => "0",
+                    'status_bayar' => 0,
                     'qrcode'=> $fileName ,
                     'jenis_bayar' => $jenisBayar
                 ];
@@ -230,7 +241,11 @@ public function cekPilihPesanan(Request $request){
                 $query->where('status_bayar', $flag);
             }
             $results = $query->paginate(25);
-            return view("admin.pembayaran.index", ['data' => $results, 'tgl' => $tanggal, 'flag' => $flag]);
+
+            $userInfo = $this->getUserInfo->getUserInfo();
+            $nama = isset($userInfo['nama']) ? $userInfo['nama'] : '';
+            $tipe = isset($userInfo['tipe']) ? $userInfo['tipe'] : '';
+            return view("admin.pembayaran.index", ['data' => $results, 'tgl' => $tanggal, 'flag' =>$flag, 'nama' => $nama, 'tipe' => $tipe]);
         }
         return view('login.index');
     }
@@ -240,7 +255,7 @@ public function cekPilihPesanan(Request $request){
             $memberId  = Auth::id();
             $no = $request->input('no_transaksi');
             $affected =  Pembayaran::where('no_transaksi', $no)
-                        ->update(['status_bayar'=>'1','id_user'=>$memberId]);
+                        ->update(['status_bayar'=>1,'id_user'=>$memberId]);
             if ($affected > 0) {
                 return response()->json([
                     'success' => true,

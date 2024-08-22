@@ -14,8 +14,8 @@
                 <div class="card-body">
                     <div class="form-group mb-2">
                         <label for="kode_kelas">Kode Kelas</label>
-                        <input type="text" class="form-control form-control-sm @error('kode_kelas')is-invalid @enderror" id="kode_kelas" name="id_kelas" value="{{ isset($kelas) ? $kelas->id_kelas : '' }}">
-                        @error('kode_kelas')
+                        <input type="text" class="form-control form-control-sm @error('id_kelas')is-invalid @enderror" id="id_kelas" name="id_kelas" value="{{ isset($kelas) ? $kelas->id_kelas : '' }}" {{ isset($kelas) ? "readonly" : '' }}>
+                        @error('id_kelas')
                         <div class="invalid-feedback">
                             {{$message}}
                         </div>

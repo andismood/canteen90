@@ -4,7 +4,6 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KelasController;
@@ -53,81 +52,82 @@ Route::middleware('auth')->group(
         Route::controller(DashboardAdminController::class)->prefix('dashboard')->group(function () {
             Route::get('', 'tenant')->name('dashboard');
             Route::get('by-id', 'getMenuById')->name('dashboard.by-id');
-            Route::post('by-id', 'simpanPesanan')->name('dashboard.by-id.simpan');
+            Route::post('by-id', 'simpanPesanan')->name('dashboard.by-id.simpan')->middleware('role:mbr');
         });
 
         Route::controller(PesananController::class)->prefix('pesanan')->group(function () {
-            Route::get('', 'index')->name('pesanan');
+            Route::get('', 'index')->name('pesanan')->middleware('role:adm,mbr');
             Route::get('cek-pesanan', 'getPesanan')->name('pesanan.cek');
             Route::get('cek-pilihan', 'cekPilihPesanan')->name('pesanan.pilihan');
-            Route::post('konfirmasi', 'KonfirmasiPembayaran')->name('pesanan.konfirmasi');
+            Route::post('konfirmasi', 'KonfirmasiPembayaran')->name('pesanan.konfirmasi')->middleware('role:adm,tnt,mbr');
             Route::get('pembayaran', 'Pembayaran')->name('pesanan.bayar');
-            Route::post('pembayaran', 'lunas')->name('pesanan.lunas');
+            Route::post('pembayaran', 'lunas')->name('pesanan.lunas')->middleware('role:adm,tnt');
             Route::get('detail-pesanan', 'detailPesanan')->name('pesanan.detail');
-            Route::delete('hapus-pesanan', 'hapusPesanan')->name('pesanan.hapus');
+            Route::delete('hapus-pesanan', 'hapusPesanan')->name('pesanan.hapus')->middleware('role:adm,mbr');
         });
 
 
         Route::controller(JenisMenuController::class)->prefix('jenis-menu')->group(function(){
-            Route::get('', 'index')->name('jenis-menu');
-            Route::get('tambah', 'tambah')->name('jenis-menu.tambah');
-            Route::post('tambah', 'simpan')->name('jenis-menu.tambah.simpan');
-            Route::get('edit/{id_jenis_menu}', 'edit')->name('jenis-menu.edit');
-            Route::post('edit/{id_jenis_menu}', 'update')->name('jenis-menu.tambah.update');
-            Route::get('hapus/{id_jenis_menu}', 'hapus')->name('jenis-menu.hapus');
+            Route::get('', 'index')->name('jenis-menu')->middleware('role:adm');
+            Route::get('tambah', 'tambah')->name('jenis-menu.tambah')->middleware('role:adm');;
+            Route::post('tambah', 'simpan')->name('jenis-menu.tambah.simpan')->middleware('role:adm');
+            Route::get('edit/{id_jenis_menu}', 'edit')->name('jenis-menu.edit')->middleware('role:adm');
+            Route::post('edit/{id_jenis_menu}', 'update')->name('jenis-menu.tambah.update')->middleware('role:adm');
+            Route::get('hapus/{id_jenis_menu}', 'hapus')->name('jenis-menu.hapus')->middleware('role:adm');
         });
 
         Route::controller(MemberController::class)->prefix('member')->group(function () {
-            Route::get('', 'index')->name('member');
-            Route::get('tambah', 'tambah')->name('member.tambah');
-            Route::post('tambah', 'simpan')->name('member.tambah.simpan');
-            Route::get('edit/{id}', 'edit')->name('member.edit');
-            Route::post('edit/{id}', 'update')->name('member.tambah.update');
-            Route::get('hapus/{id}', 'hapus')->name('member.hapus');
+            Route::get('', 'index')->name('member')->middleware('role:adm');
+            Route::get('tambah', 'tambah')->name('member.tambah')->middleware('role:adm');
+            Route::post('tambah', 'simpan')->name('member.tambah.simpan')->middleware('role:adm');
+            Route::get('edit/{id}', 'edit')->name('member.edit')->middleware('role:adm');
+            Route::post('edit/{id}', 'update')->name('member.tambah.update')->middleware('role:adm');
+            Route::get('hapus/{id}', 'hapus')->name('member.hapus')->middleware('role:adm');
         });
 
         Route::controller(ProfilController::class)->prefix('profil')->group(function () {
-            Route::get('', 'index')->name('profil');
-            Route::post('edit', 'update')->name('profil.update');
+            Route::get('', 'index')->name('profil')->middleware('role:adm,tnt,mbr');
+            Route::post('edit', 'update')->name('profil.update')->middleware('role:adm,tnt,mbr');
         });
 
         Route::controller(TenantController::class)->prefix('tenant')->group(function () {
-            Route::get('', 'index')->name('tenant');
-            Route::get('tambah', 'tambah')->name('tenant.tambah');
-            Route::post('tambah', 'simpan')->name('tenant.tambah.simpan');
-            Route::get('edit/{id}', 'edit')->name('tenant.edit');
-            Route::post('edit/{id}', 'update')->name('tenant.tambah.update');
-            Route::get('hapus/{id}', 'hapus')->name('tenant.hapus');
-            Route::get('menu/{id_tenant}','menu')->name('tenant.menu-tenant');
-            Route::get('tenant-byid', 'getById')->name('tenant.byid');
+            Route::get('', 'index')->name('tenant')->middleware('role:adm');
+            Route::get('tambah', 'tambah')->name('tenant.tambah')->middleware('role:adm');
+            Route::post('tambah', 'simpan')->name('tenant.tambah.simpan')->middleware('role:adm');
+            Route::get('edit/{id}', 'edit')->name('tenant.edit')->middleware('role:adm,tnt');
+            Route::post('edit/{id}', 'update')->name('tenant.tambah.update')->middleware('role:adm,tnt');
+            Route::get('hapus/{id}', 'hapus')->name('tenant.hapus')->middleware('role:adm');
+            Route::get('menu/{id_tenant}','menu')->name('tenant.menu-tenant')->middleware('role:adm,tnt,mbr');
+            Route::get('tenant-byid', 'getById')->name('tenant.byid')->middleware('role:adm,tnt,mbr');
         });
 
         Route::controller(UserController::class)->prefix('user')->group(function () {
-            Route::get('', 'index')->name('user');
-            Route::get('reset/{id}', 'reset')->name('tenant.reset');
+            Route::get('', 'index')->name('user')->middleware('role:adm');
+            Route::get('reset/{id}', 'reset')->name('user.reset')->middleware('role:adm');
+            Route::put('reset', 'ubah')->name('user.ubah');
         });
 
         Route::controller(TipeUserController::class)->prefix('tipe-user')->group(function () {
-            Route::get('', 'index')->name('tipe-user');
+            Route::get('', 'index')->name('tipe-user')->middleware('role:adm');
         });
 
         Route::controller(KelasController::class)->prefix('kelas')->group(function () {
-            Route::get('', 'index')->name('kelas');
-            Route::get('tambah', 'tambah')->name('kelas.tambah');
-            Route::post('tambah', 'simpan')->name('kelas.tambah.simpan');
-            Route::post('edit/{id}', 'update')->name('kelas.tambah.update');
-            Route::get('edit/{id}', 'edit')->name('kelas.edit');
-            Route::get('hapus/{id}', 'hapus')->name('kelas.hapus');
+            Route::get('', 'index')->name('kelas')->middleware('role:adm');
+            Route::get('tambah', 'tambah')->name('kelas.tambah')->middleware('role:adm');
+            Route::post('tambah', 'simpan')->name('kelas.tambah.simpan')->middleware('role:adm');
+            Route::post('edit/{id}', 'update')->name('kelas.tambah.update')->middleware('role:adm');
+            Route::get('edit/{id}', 'edit')->name('kelas.edit')->middleware('role:adm');
+            Route::get('hapus/{id}', 'hapus')->name('kelas.hapus')->middleware('role:adm');
         });
 
         Route::controller(MenuController::class)->prefix('menu')->group(function () {
-            Route::get('', 'index')->name('menu');
-            Route::get('tambah', 'tambah')->name('menu.tambah');
-            Route::post('tambah', 'simpan')->name('menu.tambah.simpan');
-            Route::post('edit/{id}', 'update')->name('menu.tambah.update');
-            Route::get('edit/{id}', 'edit')->name('menu.edit');
-            Route::get('hapus/{id}', 'hapus')->name('menu.hapus');
-            Route::get('by-id', 'getMenuById')->name('menu.by-id');
+            Route::get('', 'index')->name('menu')->middleware('role:adm,tnt');
+            Route::get('tambah', 'tambah')->name('menu.tambah')->middleware('role:adm,tnt');
+            Route::post('tambah', 'simpan')->name('menu.tambah.simpan')->middleware('role:adm,tnt');
+            Route::post('edit/{id}', 'update')->name('menu.tambah.update')->middleware('role:adm,tnt');
+            Route::get('edit/{id}', 'edit')->name('menu.edit')->middleware('role:adm,tnt');
+            Route::get('hapus/{id}', 'hapus')->name('menu.hapus')->middleware('role:adm,tnt');
+            Route::get('by-id', 'getMenuById')->name('menu.by-id')->middleware('role:adm,mbr');
 
         });
 

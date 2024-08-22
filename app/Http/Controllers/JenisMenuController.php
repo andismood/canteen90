@@ -4,14 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\JenisMenu;
 use Illuminate\Http\Request;
+use App\Services\GetUserInfo;
 use Illuminate\Support\Facades\Auth;
 
 class JenisMenuController extends Controller
 {
+    protected $getUserInfo;
+
+    public function __construct(GetUserInfo $getUserInfo)
+    {
+        $this->getUserInfo = $getUserInfo;
+    }
+
     public function index(){
         if (Auth::check()) {
         $jenisMenu = JenisMenu::get();
-        return view("admin.jenis-menu.index",['data'=>$jenisMenu]);
+        $userInfo = $this->getUserInfo->getUserInfo();
+            $nama = isset($userInfo['nama']) ? $userInfo['nama'] : '';
+            $tipe = isset($userInfo['tipe']) ? $userInfo['tipe'] : '';
+        return view("admin.jenis-menu.index",['data'=> $jenisMenu, 'nama' => $nama, 'tipe' => $tipe]);
         }
         return view('login.index');
     }
