@@ -87,6 +87,16 @@
                         @enderror
                     </div>
 
+                    <div class="col-md-4 mb-2">
+                        <label for="kalori">Jumlah Kalori</label>
+                        <input type="number" class="form-control form-control-sm @error('kalori')is-invalid @enderror" id="kalori" name="kalori" value="{{ isset($menu) ? $menu->kalori : '' }}" require value="{{ old('kalori') }}">
+                        @error('kalori')
+                        <div class="invalid-feedback">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
+
                 </div>
                 <div class=" card-footer">
                     <button type="submit" class="btn btn-sm btn-primary">{{ isset($menu) ? 'Ubah Data' : 'Simpan' }}</button>

@@ -59,6 +59,8 @@
                                         <th>JENIS</th>
                                         <th>TENANT</th>
                                         <th>KONFIRMASI</th>
+                                        <th>PICK UP</th>
+                                        <th>WAKTU</th>
                                         <th>AKSI</th>
                                     </tr>
                                 </thead>
@@ -87,11 +89,24 @@
                                             <span class="text-white bg-success ps-2 pe-2 py-1" style="border-radius: 20px">SUDAH</span>
                                             @elseif($row->status_bayar === "0")
                                             <span class="text-black bg-warning ps-2 pe-2 py-1" style="border-radius: 20px">BELUM</span>
+                                            @else
+                                            <span class="text-black ps-2 pe-2 py-1" style="border-radius: 20px">{{$row->status_bayar}}</span>
                                             @endif
 
                                         </td>
                                         <td>
+                                            @if($row->pick_up != "")
+                                            <span class="text-white bg-success ps-2 pe-2 py-1" style="border-radius: 20px">SUDAH</span>
+                                            @else
+                                            <span class="text-black bg-warning ps-2 pe-2 py-1" style="border-radius: 20px">BELUM</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <span class="text-black ps-2 pe-2 py-1" style="border-radius: 20px">{{$row->pick_up}}</span>
+                                        </td>
+                                        <td>
                                             @if(auth()->user()->id_type_user != "mbr")
+                                            <small type="button" class="btn btn-sm btn-outline-warning pickup me-1" transaksi="{{$row->no_transaksi}}" wkt="{{$row->pick_up}}">pick up</small>
                                             <small type="button" class="btn btn-sm btn-outline-dark aksi" transaksi="{{$row->no_transaksi}}" sts="{{$row->status_bayar}}">konfirmasi</small>
                                             @endif
                                             <small type="button" class="btn btn-sm btn-outline-primary m-1 detail-pesanan" transaksi="{{$row->no_transaksi}}" use="{{$row->id_member}}" tenan=" {{$row->id_tenant}}" data-bs-toggle="modal" data-bs-target="#detailModal">Detail</small>
@@ -192,6 +207,72 @@
 <script type="text/javascript" src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
 <script>
     $(document).ready(function() {
+
+        $('.pickup').click(function() {
+            var wkt = $(this).attr('wkt');
+            if (wkt != "") {
+                return Swal.fire({
+                    position: "top-center",
+                    icon: "warning",
+                    title: "Informasi",
+                    text: "Data sudah di pickup",
+                    showConfirmButton: false,
+                    timer: 1900
+                });
+            }
+            var idTransaksi = $(this).attr('transaksi');
+            Swal.fire({
+                title: 'Apakah anda ingin',
+                text: "setuju ?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ route('pesanan.pickup') }}",
+                        method: "POST",
+                        data: {
+                            no_transaksi: idTransaksi,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    position: "top-center",
+                                    icon: "success",
+                                    title: response.message,
+                                    showConfirmButton: false,
+                                    timer: 1900
+                                });
+                                window.location.reload();
+                            } else {
+                                Swal.fire({
+                                    position: "top-center",
+                                    icon: 'error',
+                                    width: 300,
+                                    title: 'GAGAL',
+                                    text: 'Error konfirmasi data'
+                                });
+                            }
+
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                width: 300,
+                                title: 'GAGAL',
+                                text: 'error saat konfirmasi data karena ' + error
+                            });
+                        }
+                    });
+                }
+            });
+
+
+        })
 
         $('.aksi').click(function() {
             var sts = $(this).attr('sts');

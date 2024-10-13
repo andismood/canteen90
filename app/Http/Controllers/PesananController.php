@@ -224,8 +224,8 @@ public function cekPilihPesanan(Request $request){
             ->join('tbl_pesanan as b', 'a.no_transaksi', '=', 'b.no_transaksi')
             ->join('mst_member as c', 'b.id_user', '=', 'c.id_member')
             ->join('mst_tenant as d', 'b.id_tenant','=','d.id_tenant')
-            ->select('a.no_transaksi', 'c.id_member', 'c.nama_member', 'id_kelas', 'a.total_bayar', 'a.jenis_bayar', 'd.id_tenant','d.nama_kantin','status_bayar','qrcode')
-            ->groupBy('a.no_transaksi', 'c.id_member', 'c.nama_member', 'id_kelas', 'a.total_bayar','a.jenis_bayar', 'd.id_tenant','d.nama_kantin','status_bayar', 'qrcode');
+            ->select('a.no_transaksi', 'c.id_member', 'c.nama_member', 'id_kelas', 'a.total_bayar', 'a.jenis_bayar', 'd.id_tenant','d.nama_kantin','status_bayar','qrcode','pick_up')
+            ->groupBy('a.no_transaksi', 'c.id_member', 'c.nama_member', 'id_kelas', 'a.total_bayar','a.jenis_bayar', 'd.id_tenant','d.nama_kantin','status_bayar','qrcode', 'pick_up');
             if ($type === "tnt") {
                 $query->where('d.id_tenant', $idTenant);
             }else if($type === "mbr"){
@@ -246,6 +246,29 @@ public function cekPilihPesanan(Request $request){
             $nama = isset($userInfo['nama']) ? $userInfo['nama'] : '';
             $tipe = isset($userInfo['tipe']) ? $userInfo['tipe'] : '';
             return view("admin.pembayaran.index", ['data' => $results, 'tgl' => $tanggal, 'flag' =>$flag, 'nama' => $nama, 'tipe' => $tipe]);
+        }
+        return view('login.index');
+    }
+
+    public function pickup(Request $request){
+        if (Auth::check()) {
+            $startTime = microtime(true);
+            $startClock = date('H:i:s', (int)$startTime);
+            $memberId  = Auth::id();
+            $no = $request->input('no_transaksi');
+            $affected =  Pembayaran::where('no_transaksi', $no)
+            ->update(['pick_up' => $startClock, 'id_user' => $memberId]);
+            if ($affected > 0) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "Data berasil dikonfirmasi "
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Data gagal dikonfirmasi "
+                ]);
+            }
         }
         return view('login.index');
     }

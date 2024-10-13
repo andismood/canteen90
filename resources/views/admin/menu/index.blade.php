@@ -26,6 +26,7 @@
                                         <th>Harga</th>
                                         <th>Pemilik</th>
                                         <th>Tenant</th>
+                                        <th>Kalori</th>
                                         <th>Status</th>
                                         <th>gambar</th>
                                         <th>Aksi</th>
@@ -41,6 +42,7 @@
                                         <td>{{ $row->harga_jual }}</td>
                                         <td>{{ $row->nama_tenant }}</td>
                                         <td>{{ $row->nama_kantin }}</td>
+                                        <td>{{ $row->kalori }}</td>
                                         <td>
                                             @if($row->status_menu == 0)
                                             Tersedia

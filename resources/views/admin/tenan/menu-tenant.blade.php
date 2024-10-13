@@ -26,11 +26,15 @@
                             <div class="col-sm-3 menuNama">
                                 @if(isset($data[0]->nama_kantin))
                                 <h3> {{$data[0]->nama_kantin}}</h3>
+                                <span style="font-size:14px; color:red">KEBUTUHAN MINIMAL KALORI DALAM SEHARI</span>
                                 @else
                                 <h3> Menu belum tersedia</h3>
                                 @endif
                             </div>
+
                         </div>
+
+
                     </div>
                     <hr>
 
@@ -41,9 +45,11 @@
                         </div>
                         <div class="p-2 mt-1">
                             <div class="mb-1" style="vertical-align: middle; font-family: 'Trebuchet MS', sans-serif; font-size: 18px;">{{ $row->nama_menu }}</div>
+                            @if($row->kalori != "")
+                            <span class="text-black" style="font-size:12px;font-style:italic">Jumlah Kalori : {{$row->kalori}}</span><br>
+                            @endif
                             <span class="text-white bg-success ps-2 pe-2 py-1" style="border-radius: 20px">Rp. {{$row->harga_jual}}</span><br>
                             <!-- <button type="button" class="btn btn-outline-info mt-2" id="{{$row->id_menu}}" id2="{{$row->id_tenant}}" data-bs-toggle="modal" data-bs-target="#exampleModal">Pesan</button> -->
-
                             @if(auth()->user()->id_type_user === "mbr")
                             <div>
                                 <small class="btn btn-sm btn-outline-info menuPesan mt-2" id="{{$row->id_menu}}" id2="{{$row->id_tenant}}" data-bs-toggle="modal" data-bs-target="#exampleModal">Pesan</small>

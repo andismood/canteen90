@@ -14,7 +14,7 @@ class Menu extends Model
 
     protected $primaryKey = 'id_menu';
 
-    protected $fillable = ['nama_menu','id_jenis_menu', 'harga_jual','id_tenant','status_menu','nama_gambar'];
+    protected $fillable = ['nama_menu','id_jenis_menu', 'harga_jual','id_tenant','status_menu','nama_gambar','kalori'];
 
     // public function scopegetAllMenu(){
     //     return DB::select("select * from tbl_menu a

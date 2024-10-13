@@ -104,7 +104,8 @@ class MenuController extends Controller
             'id_jenis_menu' => $request->id_jenis_menu,
             'harga_jual' => $request->harga_jual,
             'id_tenant' => $request->id_tenant,
-            'status_menu' => $request->status_menu
+            'status_menu' => $request->status_menu,
+            'kalori' => $request->kalori
         ];
         if ($request->hasFile('nama_gambar')) {
             $image = $request->file('nama_gambar');
@@ -153,7 +154,8 @@ class MenuController extends Controller
                     'harga_jual' => $request->harga_jual,
                     'id_tenant' => $request->id_tenant,
                     'status_menu' => $request->status_menu,
-                    'nama_gambar' => $imageName
+                    'nama_gambar' => $imageName,
+                    'kalori'=> $request->kalori
                 ];
 
                 Menu::create($data);

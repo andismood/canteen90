@@ -62,6 +62,7 @@ Route::middleware('auth')->group(
             Route::post('konfirmasi', 'KonfirmasiPembayaran')->name('pesanan.konfirmasi')->middleware('role:adm,tnt,mbr');
             Route::get('pembayaran', 'Pembayaran')->name('pesanan.bayar');
             Route::post('pembayaran', 'lunas')->name('pesanan.lunas')->middleware('role:adm,tnt');
+            Route::post('pickup', 'pickup')->name('pesanan.pickup')->middleware('role:adm,tnt');
             Route::get('detail-pesanan', 'detailPesanan')->name('pesanan.detail');
             Route::delete('hapus-pesanan', 'hapusPesanan')->name('pesanan.hapus')->middleware('role:adm,mbr');
         });
