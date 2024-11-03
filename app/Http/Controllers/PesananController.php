@@ -195,9 +195,15 @@ public function cekPilihPesanan(Request $request){
                 ];
                 Pembayaran::create($bayar);
                 DB::commit();
+                $pesan_berhasil = "Metode pembayaran berhasil dikonfirmasi. ";
+                if ($jenisBayar === "cash") {
+                    $pesan_berhasil .= "Mohon serahkan uang tunai ketika pengambilan pesanan ke <i>tenant</i>.";
+                } else {
+                    $pesan_berhasil .= "<i>Tenant</i> akan memvalidasi bukti QRIS yang telah diunggah.";
+                }
                 return response()->json([
                     'success' => true,
-                    'message' => "Data berasil dikonfirmasi "
+                    'message' => $pesan_berhasil
                 ]);
             } catch (\Exception $e) {
                 DB::rollBack();
@@ -261,7 +267,7 @@ public function cekPilihPesanan(Request $request){
             if ($affected > 0) {
                 return response()->json([
                     'success' => true,
-                    'message' => "Data berasil dikonfirmasi "
+                    'message' => "Data berhasil dikonfirmasi "
                 ]);
             } else {
                 return response()->json([
@@ -282,7 +288,7 @@ public function cekPilihPesanan(Request $request){
             if ($affected > 0) {
                 return response()->json([
                     'success' => true,
-                    'message' => "Data berasil dikonfirmasi "
+                    'message' => "Data berhasil dikonfirmasi "
                 ]);
             } else {
                 return response()->json([
@@ -302,13 +308,23 @@ public function cekPilihPesanan(Request $request){
             $no = $request->input('no_transaksi');
             $tenant = $request->input('id_tenant');
 
-            $member = Member::find($memberId);
+            $member = Member::find($memberId);            
             $kelas = Kelas::find($member->id_kelas);
-            // $pesanan = Tenant::with('menus')->find($tenant);
-            $pesanan = Tenant::with(['menus.pesanan' => function ($query) use ($memberId,$no) {
+            $pesanan = Tenant::with(['menus.pesanan' => function ($query) use ($memberId, $no) {
                 $query->where('id_user', $memberId)
-                ->where('no_transaksi',$no);
+                      ->where('no_transaksi', $no);
             }])->find($tenant);
+            
+            if (!$pesanan) {
+                return response()->json(['success' => false, 'message' => 'Pesanan not found for the tenant.'], 404);
+            }
+            
+            if ($pesanan->menus->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Pesanan Menu kosong.',
+                ], 404);
+            }            
 
             foreach ($pesanan->menus as $menu) {
                 foreach ($menu->pesanan as $pesan) {
@@ -318,8 +334,7 @@ public function cekPilihPesanan(Request $request){
                     }
                 }
             }
-
-
+            
             return response()->json([
                 'success' => true,
                 'tanggal'=> $formattedDateTime,

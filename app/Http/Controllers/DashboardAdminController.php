@@ -83,7 +83,7 @@ class DashboardAdminController extends Controller
 
             Pesanan::create($pesan);
             $data = [
-                'message'=>"Data Berhasil disimpan"
+                'message'=>"Pesanan berhasil disimpan"
             ];
             return $data;
         }

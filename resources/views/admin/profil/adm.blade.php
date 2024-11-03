@@ -12,7 +12,7 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group mb-2">
-                        <label for="id_member">User</label>
+                        <label for="id_member">Nama Pengguna / NIS</label>
                         <input type="text" class="form-control form-control-sm" id="id_user" name="id_user" value="{{ isset($user) ? $user: '' }}" readonly>
                     </div>
                     <div class="form-group mb-2">
@@ -20,7 +20,7 @@
                         <input type="text" class="form-control form-control-sm" id="password" name="password">
                     </div>
                     <div class="form-group mb-2">
-                        <label for="nama_member">konfirmasi Password baru</label>
+                        <label for="nama_member">Konfirmasi Password baru</label>
                         <input type="text" class="form-control form-control-sm" id="konfirmasi" name="konfirmasi">
                     </div>
                 </div>

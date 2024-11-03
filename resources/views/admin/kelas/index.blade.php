@@ -18,9 +18,9 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Id Kelas</th>
+                                <th>ID Kelas</th>
                                 <th>Nama Kelas</th>
-                                <th>Keterangan</th>
+                                <th>Keterangan Lokasi</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -42,6 +42,13 @@
                     </table>
                 </div>
             </div>
+            @if($data->total() > 0)
+            <div class="form-label"><label for="pagination-info" class="form-label" style="margin-left: 15px;">
+                Menampilkan data ke-{{ $data->firstItem() }} hingga ke-{{ $data->lastItem() }} dari total {{ $data->total() }} data
+                </label>
+            </div>
+            @endif
+
             @if($data->hasPages())
             <div class="card-footer">
                 {{ $data->links() }}

@@ -10,7 +10,7 @@
 
         <div class="card shadow mb-4">
             <div class="card-header bg-success py-3">
-                <h6 class="m-0 font-weight-bold text-white">Harap Konfirmasi Pesanan </h6>
+                <h6 class="m-0 font-weight-bold text-white">Harap Konfirmasi Pembayaran Pesanan</h6>
             </div>
             <div class="card-body">
                 <form action="{{ route('pesanan.bayar') }}" method="GET">
@@ -22,7 +22,7 @@
                                     <label for="tgl" class="form-label">Tanggal: </label>
                                 </div>
                                 <div class="col-12 col-md-8">
-                                    <input class="form-control form-control-sm" type="date" id="tgl" name="tgl" value="{{ empty($tgl) ? 'Y-d-m' : $tgl  }}">
+                                    <input class="form-control form-control-sm" type="date" id="tgl" name="tgl" value="{{ empty($tgl) ? date('Y-m-d') : $tgl  }}">
                                 </div>
                             </div>
                         </div>
@@ -57,9 +57,9 @@
                                         <th>KELAS</th>
                                         <th>T. BAYAR</th>
                                         <th>JENIS</th>
-                                        <th>TENANT</th>
+                                        <th><I>TENANT</I></th>
                                         <th>KONFIRMASI</th>
-                                        <th>PICK UP</th>
+                                        <th><I>PICK UP</I></th>
                                         <th>WAKTU</th>
                                         <th>AKSI</th>
                                     </tr>
@@ -73,7 +73,7 @@
                                         <td>{{ $row->id_member }}</td>
                                         <td>{{ $row->nama_member }}</td>
                                         <td>{{ $row->id_kelas }}</td>
-                                        <td>{{ "Rp. ".$row->total_bayar }}</td>
+                                        <td>{{ "Rp" . number_format($row->total_bayar, 0, ',', '.') }}</td>
                                         <td>
                                             @if ($row->jenis_bayar === 'qris')
                                             <a href="#" class="view-image" image-url="{{URL::asset('/gambar-qris/'. $row->qrcode) }}" data-bs-toggle="modal" data-bs-target="#qrisModal">
@@ -85,12 +85,10 @@
                                         </td>
                                         <td>{{ $row->nama_kantin }}</td>
                                         <td>
-                                            @if($row->status_bayar === "1")
+                                            @if($row->status_bayar === true)
                                             <span class="text-white bg-success ps-2 pe-2 py-1" style="border-radius: 20px">SUDAH</span>
-                                            @elseif($row->status_bayar === "0")
-                                            <span class="text-black bg-warning ps-2 pe-2 py-1" style="border-radius: 20px">BELUM</span>
                                             @else
-                                            <span class="text-black ps-2 pe-2 py-1" style="border-radius: 20px">{{$row->status_bayar}}</span>
+                                            <span class="text-black bg-warning ps-2 pe-2 py-1" style="border-radius: 20px">BELUM</span>
                                             @endif
 
                                         </td>
@@ -106,10 +104,10 @@
                                         </td>
                                         <td>
                                             @if(auth()->user()->id_type_user != "mbr")
-                                            <small type="button" class="btn btn-sm btn-outline-warning pickup me-1" transaksi="{{$row->no_transaksi}}" wkt="{{$row->pick_up}}">pick up</small>
+                                            <small type="button" class="btn btn-sm btn-outline-warning pickup me-1" transaksi="{{$row->no_transaksi}}" wkt="{{$row->pick_up}}"><i>pick up</i></small>
                                             <small type="button" class="btn btn-sm btn-outline-dark aksi" transaksi="{{$row->no_transaksi}}" sts="{{$row->status_bayar}}">konfirmasi</small>
                                             @endif
-                                            <small type="button" class="btn btn-sm btn-outline-primary m-1 detail-pesanan" transaksi="{{$row->no_transaksi}}" use="{{$row->id_member}}" tenan=" {{$row->id_tenant}}" data-bs-toggle="modal" data-bs-target="#detailModal">Detail</small>
+                                            <small type="button" class="btn btn-sm btn-outline-primary m-1 detail-pesanan" transaksi="{{$row->no_transaksi}}" use="{{$row->id_member}}" tenan=" {{$row->id_tenant}}" data-bs-toggle="modal" data-bs-target="#detailModal">detil</small>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -119,9 +117,15 @@
                     </div>
                 </div>
             </div>
+            @if($data->total() > 0)
+            <div class="form-label"><label for="pagination-info" class="form-label" style="margin-left: 15px;">
+                Menampilkan data ke-{{ $data->firstItem() }} hingga ke-{{ $data->lastItem() }} dari total {{ $data->total() }} data
+                </label>
+            </div>
+            @endif
             @if($data->hasPages())
             <div class="card-footer">
-                {{ $data->links() }}
+                {{ $data->appends(request()->query())->links() }}
             </div>
             @endif
         </div>
@@ -214,16 +218,16 @@
                 return Swal.fire({
                     position: "top-center",
                     icon: "warning",
-                    title: "Informasi",
-                    text: "Data sudah di pickup",
+                    title: "Pengambilan Pesanan",
+                    text: "Pesanan sudah diambil",
                     showConfirmButton: false,
                     timer: 1900
                 });
             }
             var idTransaksi = $(this).attr('transaksi');
             Swal.fire({
-                title: 'Apakah anda ingin',
-                text: "setuju ?",
+                title: 'Pengambilan Pesanan',
+                text: "Apakah pembeli ingin mengambil pesanannya?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -254,7 +258,7 @@
                                     icon: 'error',
                                     width: 300,
                                     title: 'GAGAL',
-                                    text: 'Error konfirmasi data'
+                                    text: 'Error konfirmasi pengambilan pesanan'
                                 });
                             }
 
@@ -264,7 +268,7 @@
                                 icon: 'error',
                                 width: 300,
                                 title: 'GAGAL',
-                                text: 'error saat konfirmasi data karena ' + error
+                                text: 'error saat konfirmasi pengambilan pesanan karena ' + error
                             });
                         }
                     });
@@ -280,21 +284,22 @@
                 return Swal.fire({
                     position: "top-center",
                     icon: "warning",
-                    title: "Informasi",
-                    text: "Data sudah terkonfirmasi",
+                    title: "Konfirmasi Pembayaran",
+                    text: "Pembayaran sudah terkonfirmasi",
                     showConfirmButton: false,
                     timer: 1900
                 });
             }
             var idTransaksi = $(this).attr('transaksi');
             Swal.fire({
-                title: 'Apakah anda ingin',
-                text: "mengkonfirmasi ?",
+                title: 'Konfirmasi Pembayaran',
+                text: "Apakah pembayaran pesanan ini sudah diterima?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes'
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak'
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
@@ -356,9 +361,9 @@
                 success: function(response) {
                     if (response.success) {
 
-                        $('#modal-date').text(response.tanggal);
+                        $('#modal-date').text("Pesanan dibuat pada "+response.tanggal);
                         $('#nama_member').text("Nama : " + response.nama_member);
-                        $('#kelas').text("kelas : " + response.id_kelas);
+                        $('#kelas').text("Kelas : " + response.id_kelas);
                         $('#keterangan').text(response.keterangan);
                         var orderHtml = "";
                         var orders = [];
@@ -367,16 +372,20 @@
                                 orders.push({
                                     jumlah: order.jumlah,
                                     nama_menu: menu.nama_menu,
-                                    harga: order.total_harga
+                                    harga: order.total_harga,
+                                    catatan_menu: order.catatan_menu
                                 })
 
                             })
                         });
                         var allTenantsHtml = '';
                         orders.forEach(function(order) {
+                            var formattedHarga = Number(order.harga).toLocaleString('id-ID');
+                            var catatanMenu = order.catatan_menu ? order.catatan_menu : '-';
                             var orderHtml = '<div class="row">' +
-                                '<div class="col-8">' + order.jumlah + ' ' + order.nama_menu + '</div>' +
-                                '<div class="col">' + "Rp. " + order.harga + '</div>' +
+                                '<div class="col-8">' + order.jumlah + 'x ' + order.nama_menu + '</div>' +
+                                '<div class="col">' + "Rp" + formattedHarga + '</div>' +
+                                '<div class="col-8" style="font-size:12px">Catatan: ' + catatanMenu + '</div>' +
                                 '</div>';
                             allTenantsHtml += orderHtml;
                         });

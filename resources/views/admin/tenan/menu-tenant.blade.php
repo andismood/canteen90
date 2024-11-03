@@ -10,7 +10,7 @@
 
         <div class="card shadow mb-4">
             <div class="card-header bg-success py-3">
-                <h6 class="m-0 font-weight-bold text-white">Daftar Menu Tenant</h6>
+                <h6 class="m-0 font-weight-bold text-white">Daftar Menu <i>Tenant<i></h6>
             </div>
             <div class="card-body">
 
@@ -48,7 +48,7 @@
                             @if($row->kalori != "")
                             <span class="text-black" style="font-size:12px;font-style:italic">Jumlah Kalori : {{$row->kalori}}</span><br>
                             @endif
-                            <span class="text-white bg-success ps-2 pe-2 py-1" style="border-radius: 20px">Rp. {{$row->harga_jual}}</span><br>
+                            <span class="text-white bg-success ps-2 pe-2 py-1" style="border-radius: 20px">{{ "Rp" . number_format($row->harga_jual, 0, ',', '.') }}</span><br>
                             <!-- <button type="button" class="btn btn-outline-info mt-2" id="{{$row->id_menu}}" id2="{{$row->id_tenant}}" data-bs-toggle="modal" data-bs-target="#exampleModal">Pesan</button> -->
                             @if(auth()->user()->id_type_user === "mbr")
                             <div>
@@ -67,11 +67,11 @@
             <div class="card-footer">
                 <div class="d-inline-flex">
                     <div class=" py-2">
-                        <a href="{{route('dashboard')}}" class="btn btn-sm btn-secondary px-3 mx-2">kembali</a>
+                        <a href="{{route('dashboard')}}" class="btn btn-sm btn-secondary px-3 mx-2">Kembali</a>
                     </div>
                     @if(auth()->user()->id_type_user === "mbr")
                     <div class="py-2">
-                        <small class="btn btn-sm btn-primary px-3" id="bill" data-bs-toggle="modal" data-bs-target="#billModal">Lihat Pesanan</small>
+                        <small class="btn btn-sm btn-primary px-3" id="bill" data-bs-target="#billModal">Lihat Pesanan</small>
                     </div>
                     @endif
                 </div>
@@ -101,7 +101,7 @@
                             <Label id="kelas">Kelas : </Label>
                         </div>
                         <div class="row warning mb-1">
-                            <Label>Tolong Cek Kembali Pesanan Anda</Label>
+                            <Label>Mohon Periksa Kembali Pesanan Anda</Label>
                         </div>
                     </div>
                     <hr>
@@ -111,7 +111,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Kembali</button>
                 <a href="{{route('pesanan')}}" class="btn btn-sm btn-primary" type="button">Ubah Pesanan</a>
             </div>
             <!-- </form> -->
@@ -186,7 +186,7 @@
                     </div>
                     <div class="row">
                         <input type="hidden" id="id_tenant_qr" name="id_tenant_qr" />
-                        <h4 id="modal_nama_tenant" name="modal_nama_tenant">Nama Tenant</h4>
+                        <h4 id="modal_nama_tenant" name="modal_nama_tenant">Nama <i>Tenant</i></h4>
                     </div>
 
                 </div>
@@ -209,7 +209,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <button type="button" onclick="sendQris()" class="btn btn-sm btn-primary ">Pesan</button>
+                <button type="button" onclick="sendQris()" class="btn btn-sm btn-primary ">Unggah Bukti QRIS</button>
             </div>
         </div>
     </div>
@@ -240,7 +240,9 @@
 
                     // Contoh lain untuk menampilkan informasi lainnya di modal
                     $('#modalMenuName').text(response.menu.nama_menu);
-                    $('#modalMenuPrice').text("Rp. " + response.menu.harga_jual);
+                    $('#modalMenuPrice')
+                        .text("Rp" + Number(response.menu.harga_jual).toLocaleString('id-ID'))
+                        .data('harga', response.menu.harga_jual);
                     $('#id_menu').text(id_menu);
                     $('#id_tenant').text(id_tenant);
                 },
@@ -271,8 +273,8 @@
                 Swal.fire({
                     icon: 'error',
                     width: 300,
-                    title: 'GAGAL',
-                    text: 'Jumlah Minimal 1 Pesanan'
+                    title: 'Gagal',
+                    text: 'Jumlah pesanan minimal 1'
                 });
             }
             event.preventDefault();
@@ -306,13 +308,12 @@
                 error: function(response) {
                     Swal.fire({
                         icon: 'error',
-                        title: 'GAGAL',
+                        title: 'Gagal',
                         text: 'Terjadi kesalahan saat mendapatkan data.' + response,
                     });
                 }
             });
         }
-
 
         function cekPesanan() {
             $.ajax({
@@ -322,13 +323,24 @@
                     _token: "{{ csrf_token() }}"
                 },
                 success: function(response) {
-                    // console.log(response);
                     if (response.success) {
+                        let totalPesanan = response.menu.length; // Assuming 'menu' contains the orders
+
+                        if (totalPesanan === 0) {
+                            // Show SweetAlert if there are no orders
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'Tidak ada pesanan',
+                                text: 'Anda tidak memiliki pesanan yang belum dibayar.',
+                            });
+                            return; // Exit the function if there are no orders
+                        }      
+
                         var user_id = response.user_id;
                         var pesanan = response.menu;
                         var tenantOrders = {}; // Objek untuk menyimpan pesanan berdasarkan ID tenant
                         $('#nama_member').text("Nama : " + response.nama_member);
-                        $('#kelas').text("kelas : " + response.id_kelas);
+                        $('#kelas').text("Kelas : " + response.id_kelas);
 
                         // Mengelompokkan pesanan berdasarkan ID tenant
                         pesanan.forEach(function(tenant) {
@@ -345,12 +357,11 @@
                                     tenantOrders[tenant_id].orders.push({
                                         jumlah: pesan.jumlah,
                                         nama_menu: menu.nama_menu,
-                                        harga: pesan.total_harga
+                                        harga: pesan.total_harga,
+                                        catatan_menu: pesan.catatan_menu
                                     });
                                 });
                             });
-
-
                         });
 
                         // Menampilkan pesanan berdasarkan tenant
@@ -365,42 +376,49 @@
                                 // Menambahkan setiap pesanan untuk tenant
                                 var totals = 0;
                                 tenantData.orders.forEach(function(order) {
+                                    var formattedHarga = Number(order.harga).toLocaleString('id-ID'); // Format price
+                                    var catatanMenu = order.catatan_menu ? order.catatan_menu : '-'; // Handle null notes
+
                                     var orderHtml = '<div class="row">' +
-                                        '<div class="col-8">' + order.jumlah + ' ' + order.nama_menu + '</div>' +
-                                        '<div class="col-4">' + "Rp. " + order.harga + '</div>' +
+                                        '<div class="col-8">' + order.jumlah + 'x ' + order.nama_menu + '</div>' +
+                                        '<div class="col-4">' + "Rp" + formattedHarga + '</div>' +
+                                        '<div class="col-8" style="font-size:12px">Catatan: ' + catatanMenu + '</div>' +
                                         '</div>';
                                     tenantHtml += orderHtml;
-                                    totals += parseInt(order.harga);
+                                    totals += parseInt(order.harga); // Add to total
                                 });
+
+                                var formattedTotal = Number(totals).toLocaleString('id-ID'); // Format total
                                 var tot = '<div class="row mt-2">' +
                                     '<div class="col-12 d-flex justify-content-end">' +
                                     '<div class="total-container">' +
-                                    '<span class="total-text">Rp. ' + totals + '</span>' +
+                                    '<span class="total-text">Rp' + formattedTotal + '</span>' +
                                     '</div>' +
                                     '</div>' +
                                     '</div>';
                                 tenantHtml += tot;
-                                tenantHtml += '<button type="button" class="btn btn-sm btn-primary  me-3" onclick="cash(' + tenantData.tenant_id + ')">Cash</button>';
-                                tenantHtml += '<button type="button" class="btn btn-sm btn-primary pe-2 ps-2"  onclick="qris(' + tenantData.tenant_id + ')">Qris</button>';
+
+                                tenantHtml += '<button type="button" class="btn btn-sm btn-primary me-3" onclick="cash(' + tenantData.tenant_id + ')">Cash</button>';
+                                tenantHtml += '<button type="button" class="btn btn-sm btn-primary pe-2 ps-2" onclick="qris(' + tenantData.tenant_id + ')">QRIS</button>';
                                 tenantHtml += '</div>';
                                 allTenantsHtml += tenantHtml;
                             }
                         }
 
+                        // Update the #data div with the generated HTML
                         $('#data').html(allTenantsHtml);
+                        $('#billModal').modal('show');                        
                     }
-
                 },
                 error: function(response) {
                     Swal.fire({
                         icon: 'error',
-                        title: 'GAGAL',
+                        title: 'Gagal',
                         text: 'Terjadi kesalahan saat mendapatkan data.' + response,
                     });
                 }
             });
         }
-
 
 
         function bersih() {
@@ -412,7 +430,7 @@
         function simpan() {
             var id_menu = $('#id_menu').text();
             var id_tenant = $('#id_tenant').text();
-            var harga = parseFloat($('#modalMenuPrice').text().replace('Rp. ', '').replace('.', '').replace(',', '.')); // Mengambil harga dan mengubah formatnya ke float
+            var harga = parseFloat($('#modalMenuPrice').data('harga'));
             var jumlah = parseInt($('#jumlah').val());
             var catatan = $('#catatan').val();
             var total = harga * jumlah;
@@ -435,8 +453,8 @@
                     Swal.fire({
                         icon: 'success',
                         type: 'success',
-                        title: 'Success',
-                        text: response.message,
+                        title: 'Berhasil',
+                        html: response.message,
                     });
                     bersih();
                     $('#exampleModal').modal('hide');
@@ -444,7 +462,7 @@
                 error: response => {
                     Swal.fire({
                         icon: 'error',
-                        title: 'GAGAL',
+                        title: 'Gagal',
                         text: 'Terjadi kesalahan saat menyimpan data.' + response.message,
                     });
                 }
@@ -476,7 +494,7 @@
             error: function(response) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'GAGAL',
+                    title: 'Gagal',
                     text: 'Terjadi kesalahan saat membuka .' + response.message,
                 });
             }
@@ -496,7 +514,7 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Gagal',
-                    text: 'Wajib mengupload bukti bayar.',
+                    text: 'Wajib mengunggah bukti bayar menggunakan QRIS',
                 });
                 return;
             }
@@ -538,8 +556,8 @@
                         Swal.fire({
                             icon: 'success',
                             type: 'success',
-                            title: 'Success',
-                            text: response.message,
+                            title: 'Berhasil',
+                            html: response.message,
                         });
                         $('#billModal').modal('hide');
                         $('#qrisModal').modal('hide');
@@ -552,16 +570,20 @@
 
                             if (response.message) {
                                 errorMessage = response.message;
+                            // } else if (response.errors && response.errors.qrcode && response.errors.qrcode.length > 0) {
                             } else if (response.errors && response.errors.qrcode && response.errors.qrcode.length > 0) {
-                                errorMessage = response.errors.qrcode[0];
+                                for (let i = 0; i < response.errors.qrcode.length; i++) {
+                                    errorMessage += '<p>' + response.errors.qrcode[i] + '</p>'; // Add each error in a new line
+                                }                                
                             }
                         } catch (e) {
                             console.error('Error parsing the response:', e);
                         }
+
                         Swal.fire({
                             icon: 'error',
-                            title: 'GAGAL',
-                            text: errorMessage + 'File harus berformat jpg, jpeg atau png',
+                            title: 'Gagal',
+                            html: errorMessage + '<p>File harus berformat jpg, jpeg atau png</p>',
                         });
                     }
                 });
@@ -574,12 +596,13 @@
         if (tenantId != "") {
             Swal.fire({
                 title: 'Informasi',
-                text: "Pembayaran melalui cash ?",
+                text: "Apakah Anda ingin melakukan pembayaran menggunakan uang tunai?",
                 icon: 'info',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes'
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak'
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
@@ -594,15 +617,15 @@
                             Swal.fire({
                                 icon: 'success',
                                 type: 'success',
-                                title: 'Success',
-                                text: response.message,
+                                title: 'Berhasil',
+                                html: response.message,
                             });
                             $('#billModal').modal('hide');
                         },
                         error: function(response) {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'GAGAL',
+                                title: 'Gagal',
                                 text: 'Terjadi kesalahan saat mengkonfirmasi pesanan.' + response.message,
                             });
                         }

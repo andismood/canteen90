@@ -20,3 +20,12 @@ yarn-error.log
 /public/gambar-qris
 /public/images
 /public/privates
+
+
+# Laravel 4 specific
+bootstrap/compiled.php
+app/storage/
+/.vagrant
+.phpunit.result.cache
+
+.DS_Store

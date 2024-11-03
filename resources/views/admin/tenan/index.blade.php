@@ -10,7 +10,7 @@
 
         <div class="card shadow mb-4">
             <div class="card-header bg-success py-3">
-                <h6 class="m-0 font-weight-bold text-white">Data Tenant</h6>
+                <h6 class="m-0 font-weight-bold text-white">Data <i>Tenant</i></h6>
             </div>
             <div class="card-body">
                 <a href="{{route('tenant.tambah')}}" class="btn btn-sm btn-success mb-3">Tambah</a>
@@ -19,8 +19,8 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Pemilik Tenant</th>
-                                <th>Nama Tenant</th>
+                                <th>Pemilik <i>Tenant</i></th>
+                                <th>Nama <i>Tenant</i></th>
                                 <th>Nama Pengguna</th>
                                 <th>Status Aktif</th>
                                 <th>Aksi</th>
@@ -52,6 +52,13 @@
                     </table>
                 </div>
             </div>
+            @if($data->total() > 0)
+            <div class="form-label"><label for="pagination-info" class="form-label" style="margin-left: 15px;">
+                Menampilkan data ke-{{ $data->firstItem() }} hingga ke-{{ $data->lastItem() }} dari total {{ $data->total() }} data
+                </label>
+            </div>
+            @endif
+
             @if($data->hasPages())
             <div class="card-footer">
                 {{ $data->links() }}

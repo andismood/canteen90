@@ -25,13 +25,15 @@
                                         <th>Jenis Menu</th>
                                         <th>Harga</th>
                                         <th>Pemilik</th>
-                                        <th>Tenant</th>
+                                        <th><i>Tenant</i></th>
                                         <th>Kalori</th>
                                         <th>Status</th>
-                                        <th>gambar</th>
+                                        <th>Gambar</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
+                                {{-- $row->id_jenis_menu == 1 it's 'makanan', if 4 then it's 'minuman' --}}
+                                {{-- $row->status_menu == 0 it's 'Tersedia', if 1 then it's 'Habis', if 2 then it's 'Tidak Tersedia' --}}
                                 <tbody style="vertical-align: middle;">
                                     @php($no = 1)
                                     @foreach ($data as $row)
@@ -39,7 +41,7 @@
                                         <th>{{ $no++ }}</th>
                                         <td>{{ $row->nama_menu }}</td>
                                         <td>{{ $row->id_jenis_menu == 1 ? 'makanan' : 'minuman' }}</td>
-                                        <td>{{ $row->harga_jual }}</td>
+                                        <td>{{ 'Rp' . number_format($row->harga_jual, 0, ',', '.') }}</td>
                                         <td>{{ $row->nama_tenant }}</td>
                                         <td>{{ $row->nama_kantin }}</td>
                                         <td>{{ $row->kalori }}</td>
@@ -70,6 +72,13 @@
                     </div>
                 </div>
             </div>
+            @if($data->total() > 0)
+            <div class="form-label"><label for="pagination-info" class="form-label" style="margin-left: 15px;">
+                Menampilkan data ke-{{ $data->firstItem() }} hingga ke-{{ $data->lastItem() }} dari total {{ $data->total() }} data
+                </label>
+            </div>
+            @endif
+
             @if($data->hasPages())
             <div class="card-footer">
                 {{ $data->links() }}

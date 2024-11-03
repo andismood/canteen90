@@ -21,7 +21,7 @@
                                 <th>No</th>
                                 <th>NIS</th>
                                 <th>Nama Siswa</th>
-                                <th>Id kelas</th>
+                                <th>ID Kelas</th>
                                 <th>Aksi</th>
 
                             </tr>
@@ -37,6 +37,7 @@
                                 <td>
                                     <a href="{{ route('member.edit', $row->id_member) }}" class="btn btn-sm btn-warning">Ubah</a>
                                     <a href="{{ route('member.hapus', $row->id_member) }}" class="btn btn-sm btn-danger">Hapus</a>
+                                    {{-- TODO: Tombol Hapus harus menampilkan konfirmasi bahwa data akan dihapus --}}
                                 </td>
                             </tr>
                             @endforeach
@@ -44,6 +45,13 @@
                     </table>
                 </div>
             </div>
+            @if($data->total() > 0)
+            <div class="form-label"><label for="pagination-info" class="form-label" style="margin-left: 15px;">
+                Menampilkan data ke-{{ $data->firstItem() }} hingga ke-{{ $data->lastItem() }} dari total {{ $data->total() }} data
+                </label>
+            </div>
+            @endif
+
             @if($data->hasPages())
             <div class="card-footer">
                 {{ $data->links() }}

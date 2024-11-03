@@ -10,7 +10,7 @@
 
         <div class="card shadow mb-4">
             <div class="card-header bg-success py-3">
-                <h6 class="m-0 font-weight-bold text-white">Harap cek Pesanan Anda</h6>
+                <h6 class="m-0 font-weight-bold text-white">Harap Periksa Pesanan Anda</h6>
             </div>
             <div class="card-body">
                 <!-- <a href="" class="btn btn-success mb-3">Konfirmasi Pesanan</a> -->
@@ -25,7 +25,7 @@
                                         <th>Nama Menu</th>
                                         <th>Harga</th>
                                         <th>Jumlah</th>
-                                        <th>Total Harga</th>
+                                        <th>Total Pembayaran</th>
                                         <th>Catatan</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -36,14 +36,15 @@
                                     <tr>
                                         <th>{{ $no++ }}</th>
                                         <td>{{ $row->nama_menu }}</td>
-                                        <td>{{ 'Rp. '.$row->harga_jual }}</td>
+                                        <td>{{ 'Rp' . number_format($row->harga_jual, 0, ',', '.') }}</td>
                                         <td>{{ $row->jumlah }}</td>
-                                        <td>{{ 'Rp. '.$row->total_harga }}</td>
+                                        <td>{{ 'Rp' . number_format($row->total_harga, 0, ',', '.') }}</td>
                                         <td>{{ $row->catatan_menu }}</td>
                                         <td class="hps">
                                             <!-- <a href="" class="btn btn-sm btn-warning m-1">Edit</a> -->
                                             <!-- <a href="" class="btn btn-sm btn-danger">Hapus</a> -->
                                             <small class="btn btn-sm btn-danger px-2" data-tnt="{{$row->id_tenant}}" data-mn="{{$row->id_menu}}">Hapus</small>
+                                            {{-- TODO: Add 'ubah' button to edit order, instead of deleting order and create a correct order --}}
                                         </td>
                                     </tr>
                                     @endforeach
@@ -52,11 +53,18 @@
                         </div>
                         <div class="d-inline-flex py-2">
 
-                            <a href="{{route('dashboard')}}" class="btn btn-sm btn-secondary px-3 mx-2">kembali</a>
+                            <a href="{{route('dashboard')}}" class="btn btn-sm btn-secondary px-3 mx-2">Kembali</a>
 
                         </div>
                     </div>
                 </div>
+                @if($data->total() > 0)
+            <div class="form-label"><label for="pagination-info" class="form-label" style="margin-left: 15px;">
+                Menampilkan data ke-{{ $data->firstItem() }} hingga ke-{{ $data->lastItem() }} dari total {{ $data->total() }} data
+                </label>
+            </div>
+            @endif
+
                 @if($data->hasPages())
                 <div class="card-footer">
                     {{ $data->links() }}
@@ -79,12 +87,13 @@
             var id_tenant = $(this).data('tnt');
             Swal.fire({
                 title: 'Peringatan',
-                text: "Apakah anda yakin ?",
+                text: "Apakah Anda yakin untuk menghapus pesanan?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes'
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak'
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
